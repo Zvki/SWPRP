@@ -25,9 +25,7 @@ export class Button {
   @Output() click = new EventEmitter<MouseEvent>();
 
   protected get tailwindClassCombine(): string {
-    return tailwindClassCombine(ButtonBase, ButtonVariants[this.variant], ButtonSizes[this.size], this.class, {
-      'cursor-pointer': !!this.routerLink
-    })
+    return tailwindClassCombine(ButtonBase, ButtonVariants[this.variant], ButtonSizes[this.size], this.class)
   }
 
   protected handleClick(event: MouseEvent): void {
