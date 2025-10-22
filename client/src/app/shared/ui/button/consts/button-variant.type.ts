@@ -4,7 +4,7 @@ export const ButtonBase: string = "cursor-pointer inline-flex items-center justi
 
 export const ButtonVariants: Record<ButtonVariantType, string> = {
   default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-  outline: 'border border-input bg-transparent hover:bg-accent hover:text-accent-foreground',
+  outline: 'border border-input bg-transparent hover:bg-accent text-accent-foreground',
   link: 'text-foreground underline-offset-4 hover:underline',
   ghost: 'hover:bg-accent hover:text-accent-foreground',
   destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
