@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {Button} from '../../shared/ui/button/button';
+import {Theme} from '../../core/services/theme';
+import {ButtonDirective} from '../../shared/ui/button/button-directive';
 
 @Component({
   selector: 'app-header',
@@ -8,11 +9,12 @@ import {Button} from '../../shared/ui/button/button';
   standalone: true,
   imports: [
     RouterLink,
-    Button
+    ButtonDirective
   ],
   styleUrl: './header.css'
 })
 export class Header {
+  protected readonly themeService = inject(Theme)
 
   user: any = { name: 'Tester' };
 

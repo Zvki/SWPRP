@@ -11,25 +11,24 @@
 
       <div class="hidden md:block">
         <ul class="nav-links ml-10 flex items-baseline space-x-2">
-          <li><app-button routerLink="/dashboard" variant="ghost">Dashboard</app-button></li>
-          <li><app-button routerLink="/profile" variant="ghost">Profil</app-button></li>
-          <li><app-button routerLink="/settings" variant="ghost">Ustawienia</app-button></li>
+          <li><button appButton routerLink="/dashboard" variant="ghost">Dashboard</button></li>
+          <li><button appButton routerLink="/profile" variant="ghost">Profil</button></li>
+          <li><button appButton routerLink="/settings" variant="ghost">Ustawienia</button></li>
         </ul>
       </div>
 
-      <div class="hidden md:block">
         <div class="ml-4 flex items-center md:ml-6 space-x-4">
           @if (user) {
             <span class="text-sm text-muted-foreground">
               Witaj, <span class="font-medium text-foreground">{{ user.name }}</span>
             </span>
 
-            <app-button (click)="onLogout()" variant="destructive">
+            <button appButton (click)="onLogout()" variant="destructive">
               Wyloguj
-            </app-button>
+            </button>
           }
+          <button appButton size="icon" variant="ghost" (click)="themeService.setDarkMode()"><i class="ri-moon-line"></i></button>
         </div>
       </div>
-    </div>
   </nav>
 </header>
