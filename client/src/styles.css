@@ -1,3 +1,4 @@
+@import 'remixicon/fonts/remixicon.css';
 @import "tailwindcss";
 /* todo: replace config with @theme */
 @config "../tailwind.config.js";
