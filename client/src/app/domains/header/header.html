@@ -1,73 +1,35 @@
-<header class="main-header bg-white shadow-sm border-b border-gray-200">
+<header class="bg-background border-b border-border">
 
-  <nav class="nav-container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
 
       <div class="flex-shrink-0">
-        <a class="logo text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors" routerLink="/dashboard">
+        <a class="text-2xl font-bold text-foreground hover:text-foreground/80 transition-colors" routerLink="/dashboard">
           SWPRP
         </a>
       </div>
 
       <div class="hidden md:block">
-        <ul class="nav-links ml-10 flex items-baseline space-x-4">
-          <li><a routerLink="/dashboard" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-all">Dashboard</a></li>
-          <li><a routerLink="/profile" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-all">Profil</a></li>
-          <li><a routerLink="/settings" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-all">Ustawienia</a></li>
+        <ul class="nav-links ml-10 flex items-baseline space-x-2">
+          <li><app-button routerLink="/dashboard" variant="ghost">Dashboard</app-button></li>
+          <li><app-button routerLink="/profile" variant="ghost">Profil</app-button></li>
+          <li><app-button routerLink="/settings" variant="ghost">Ustawienia</app-button></li>
         </ul>
       </div>
 
       <div class="hidden md:block">
-        <div class="user-actions ml-4 flex items-center md:ml-6 space-x-4">
+        <div class="ml-4 flex items-center md:ml-6 space-x-4">
           @if (user) {
-            <span class="welcome-message text-sm text-gray-600">
-              Witaj, <span class="font-medium text-gray-800">{{ user.name }}</span>
+            <span class="text-sm text-muted-foreground">
+              Witaj, <span class="font-medium text-foreground">{{ user.name }}</span>
             </span>
 
-            <button class="logout-button bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" (click)="onLogout()">
+            <app-button (click)="onLogout()" variant="destructive">
               Wyloguj
-            </button>
-          } @else {
+            </app-button>
           }
         </div>
       </div>
-
-      <div class="-mr-2 flex md:hidden">
-        <button type="button" class="inline-flex items-center justify-center rounded-md bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-controls="mobile-menu" aria-expanded="false">
-          <span class="sr-only">Otwórz menu</span>
-
-          <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-
-          <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
     </div>
   </nav>
-
-  <div class="md:hidden hidden" id="mobile-menu">
-    <ul class="nav-links space-y-1 px-2 pb-3 pt-2 sm:px-3">
-      <li><a routerLink="/dashboard" class="block text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium transition-all">Dashboard</a></li>
-      <li><a routerLink="/profile" class="block text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium transition-all">Profil</a></li>
-      <li><a routerLink="/settings" class="block text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium transition-all">Ustawienia</a></li>
-    </ul>
-
-    @if (user) {
-      <div class="user-actions border-t border-gray-200 px-4 py-4">
-        <div class="flex items-center mb-3">
-          <span class="welcome-message text-base font-medium text-gray-800">
-            Witaj, {{ user.name }}
-          </span>
-        </div>
-        <button class="logout-button w-full text-left bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" (click)="onLogout()">
-          Wyloguj
-        </button>
-      </div>
-    }
-  </div>
 </header>
