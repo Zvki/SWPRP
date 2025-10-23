@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import {ProjectCard} from './components/project-card/project-card';
 import {ButtonDirective} from '../../shared/ui/button/button-directive';
+import {Status} from './const/status';
 
 export interface Project {
   id: number;
   title: string;
   author: string[];
-  status: 'W toku' | 'Zakończony' | 'Zagrożony';
+  status: Status;
   progress: number;
   deadline: string;
   category: string;
@@ -29,7 +30,7 @@ export class Dashboard {
       id: 1,
       title: 'System rezerwacji sal konferencyjnych',
       author: ['Jan Kowalski', 'Bartłomiej Kawecki'],
-      status: 'W toku',
+      status: 'in-progress',
       progress: 75,
       deadline: '31.01.2026',
       category: 'Praca inżynierska',
@@ -38,7 +39,7 @@ export class Dashboard {
       id: 2,
       title: 'Analiza sentymentu opinii produktowych z użyciem AI',
       author: ['Anna Nowak'],
-      status: 'Zakończony',
+      status: 'danger',
       progress: 100,
       deadline: '15.10.2025',
       category: 'Praca magisterska',
@@ -47,7 +48,7 @@ export class Dashboard {
       id: 3,
       title: 'Aplikacja mobilna do zarządzania budżetem domowym',
       author: ['Piotr Wiśniewski'],
-      status: 'Zagrożony',
+      status: 'success',
       progress: 20,
       deadline: '20.12.2025',
       category: 'Projekt zespołowy',
@@ -56,7 +57,7 @@ export class Dashboard {
       id: 4,
       title: 'Platforma e-learningowa dla programistów',
       author: ['Katarzyna Wójcik'],
-      status: 'W toku',
+      status: 'success',
       progress: 50,
       deadline: '10.03.2026',
       category: 'Praca inżynierska',
