@@ -1,0 +1,25 @@
+<section>
+  <div class="bg-background/95 min-h-screen">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+      <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 class="text-3xl font-bold text-foreground">Panel projektów</h1>
+          <p class="text-foreground mt-1">Przegląd zarządzanych prac dyplomowych i projektów.</p>
+        </div>
+
+        <button appButton variant="default">
+          <div class="mr-2"><i class="ri-add-large-line"></i></div>
+          Dodaj nowy projekt
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        @for (project of projects; track project.id) {
+          <app-project-card [project]="project"></app-project-card>
+        }
+      </div>
+    </div>
+  </div>
+</section>
