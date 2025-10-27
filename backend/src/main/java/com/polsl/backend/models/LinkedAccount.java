@@ -25,17 +25,10 @@ public class LinkedAccount {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false)
     private Provider provider;
 
     @Column(name = "provider_user_id", nullable = false)
     private String providerUserId;
-
-    @Column(name = "password")
-    private String password;
-
 }
