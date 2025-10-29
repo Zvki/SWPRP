@@ -1,8 +1,10 @@
 package com.polsl.backend.models;
 
+import com.polsl.backend.dto.UserRequest;
 import com.polsl.backend.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -52,5 +55,16 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public static User build(UserRequest user, String password){
+        return User
+                .builder()
+                .firstName(user.firstName())
+                .lastName(user.lastName())
+                .email(user.email())
+                .password(password)
+                .role(user.role())
+                .build();
     }
 }
