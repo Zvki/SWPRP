@@ -3,25 +3,32 @@ package com.polsl.backend.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
 
+    //todo: replace with env variables
     private static final String SECRET_KEY = "TWOJ_SUPER_TAJNY_KLUCZ_BASE64_O_DLUGOSCI_CO_NAJMNIEJ_256_BITOW";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(userDetails.getAuthorities().stream().findFirst().get().getAuthority(), "role");
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        if (!roles.isEmpty()) {
+            claims.put("roles", roles);
+        }
 
         return createToken(claims, userDetails.getUsername());
     }
