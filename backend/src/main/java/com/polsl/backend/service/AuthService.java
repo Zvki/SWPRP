@@ -1,7 +1,7 @@
 package com.polsl.backend.service;
 
-import com.polsl.backend.dto.UserLogin;
-import com.polsl.backend.dto.UserRegister;
+import com.polsl.backend.dto.user.UserLogin;
+import com.polsl.backend.dto.user.UserRegister;
 import com.polsl.backend.models.LinkedAccount;
 import com.polsl.backend.models.User;
 import com.polsl.backend.repository.UserRepository;

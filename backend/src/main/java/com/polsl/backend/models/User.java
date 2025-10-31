@@ -1,6 +1,6 @@
 package com.polsl.backend.models;
 
-import com.polsl.backend.dto.UserRegister;
+import com.polsl.backend.dto.user.UserRegister;
 import com.polsl.backend.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

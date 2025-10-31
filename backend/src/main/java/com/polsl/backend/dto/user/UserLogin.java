@@ -1,4 +1,4 @@
-package com.polsl.backend.dto;
+package com.polsl.backend.dto.user;
 
 public record UserLogin(
         String email,
