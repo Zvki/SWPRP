@@ -35,4 +35,13 @@ public class JwtCookieService {
                 .map(Cookie::getValue)
                 .findFirst();
     }
+
+    public void clearCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie(cookieName, "");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(cookieSecure);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
 }
