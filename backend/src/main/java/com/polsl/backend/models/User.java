@@ -1,6 +1,6 @@
 package com.polsl.backend.models;
 
-import com.polsl.backend.dto.UserRequest;
+import com.polsl.backend.dto.UserRegister;
 import com.polsl.backend.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -57,7 +57,7 @@ public class User implements UserDetails {
         return email;
     }
 
-    public static User build(UserRequest user, String password){
+    public static User build(UserRegister user, String password){
         return User
                 .builder()
                 .firstName(user.firstName())
