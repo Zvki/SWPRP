@@ -1,8 +1,8 @@
 package com.polsl.backend.controller;
 
-import com.polsl.backend.dto.UserLogin;
-import com.polsl.backend.dto.UserRegister;
-import com.polsl.backend.dto.UserResponse;
+import com.polsl.backend.dto.user.UserLogin;
+import com.polsl.backend.dto.user.UserRegister;
+import com.polsl.backend.dto.user.UserResponse;
 import com.polsl.backend.service.AuthService;
 import com.polsl.backend.utils.JwtCookieService;
 import com.polsl.backend.utils.JwtService;

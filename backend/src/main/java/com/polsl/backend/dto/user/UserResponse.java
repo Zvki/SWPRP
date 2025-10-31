@@ -1,4 +1,4 @@
-package com.polsl.backend.dto;
+package com.polsl.backend.dto.user;
 
 import com.polsl.backend.enums.UserRole;
 import com.polsl.backend.models.User;
