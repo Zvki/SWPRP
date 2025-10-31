@@ -1,10 +1,11 @@
 package com.polsl.backend.exception;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -22,6 +23,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> entityExistsExceptionHandler(EntityExistsException ex){
         log.warn("Entity already exists: {}", ex.getMessage());
         return ResponseEntity.status(CONFLICT).body(createErrorMessage(ex.getMessage(), CONFLICT.value(), singletonList(ex.getMessage())));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> entityNotFoundExceptionHandler(EntityNotFoundException ex){
+        log.warn("Entity not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(createErrorMessage(ex.getMessage(), HttpStatus.NOT_FOUND.value(), singletonList(ex.getMessage())));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorMessage> badCredentialsExceptionHandler(BadCredentialsException ex){
+        log.warn("Bad credentials: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(createErrorMessage(ex.getMessage(), HttpStatus.UNAUTHORIZED.value(), singletonList(ex.getMessage())));
     }
 
     private ErrorMessage createErrorMessage(String message, Integer statusCode, List<String> errors){

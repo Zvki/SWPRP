@@ -1,6 +1,7 @@
 package com.polsl.backend.controller;
 
-import com.polsl.backend.dto.UserRequest;
+import com.polsl.backend.dto.UserLogin;
+import com.polsl.backend.dto.UserRegister;
 import com.polsl.backend.dto.UserResponse;
 import com.polsl.backend.service.AuthService;
 import com.polsl.backend.utils.JwtCookieService;
@@ -9,10 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,9 +23,23 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(HttpServletResponse response,
-                                                 @RequestBody UserRequest user) {
+                                                 @RequestBody UserRegister user) {
         var result = authService.register(user);
         jwtCookieService.setCookie(response, jwtService.generateToken(result));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromUser(result));
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<UserResponse> login(HttpServletResponse response,
+                                              @RequestBody UserLogin user) {
+        var result = authService.login(user);
+        jwtCookieService.setCookie(response, jwtService.generateToken(result));
+        return ResponseEntity.status(HttpStatus.OK).body(UserResponse.fromUser(result));
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        jwtCookieService.clearCookie(response);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
