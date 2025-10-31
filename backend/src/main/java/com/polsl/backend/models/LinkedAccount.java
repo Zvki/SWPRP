@@ -5,6 +5,7 @@ package com.polsl.backend.models;
 import com.polsl.backend.enums.Provider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class LinkedAccount {
 
     @Id
@@ -25,17 +27,10 @@ public class LinkedAccount {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false)
     private Provider provider;
 
     @Column(name = "provider_user_id", nullable = false)
     private String providerUserId;
-
-    @Column(name = "password")
-    private String password;
-
 }
