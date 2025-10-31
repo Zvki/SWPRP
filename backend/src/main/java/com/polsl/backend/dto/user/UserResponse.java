@@ -17,7 +17,7 @@ public record UserResponse(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail(), // lub user.getUsername()
+                user.getEmail(),
                 user.getRole()
         );
     }
