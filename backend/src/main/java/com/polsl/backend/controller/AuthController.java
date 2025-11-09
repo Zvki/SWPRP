@@ -29,7 +29,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromUser(result));
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<UserResponse> login(HttpServletResponse response,
                                               @RequestBody UserLogin user) {
         var result = authService.login(user);
