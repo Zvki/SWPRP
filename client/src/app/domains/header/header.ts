@@ -5,7 +5,6 @@ import {ButtonDirective} from '../../shared/ui/button/button-directive';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {SigninDialog} from './signin-dialog/signin-dialog';
 import {AuthService} from '../../core/services/api/auth.service';
-import {UserData} from '../../core/interfaces/user-data';
 
 @Component({
   selector: 'app-header',
@@ -23,7 +22,7 @@ export class Header {
   protected readonly authService = inject(AuthService);
   protected readonly themeService = inject(Theme)
 
-  user: UserData | null = this.authService.getUserStore;
+  user = this.authService.getUserStore;
 
   onLogout() {
     console.log('Wylogowano');
