@@ -69,5 +69,10 @@
   }
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+  background-image: radial-gradient(circle at top, hsl(var(--secondary)) 0%, hsl(var(--background)) 35%);
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
