@@ -1,8 +1,11 @@
 import {Component, Input} from '@angular/core';
-import {Project} from '../../dashboard';
 import {NgClass} from '@angular/common';
 import {ButtonDirective} from '../../../../shared/ui/button/button-directive';
-import {StatusLabel, StatusStyling} from '../../const/status';
+import {
+  ProjectResponse,
+  ProjectStatusLabel,
+  ProjectStatusStyling
+} from '../../../../core/interfaces/project/project-response';
 
 @Component({
   selector: 'app-project-card',
@@ -15,7 +18,7 @@ import {StatusLabel, StatusStyling} from '../../const/status';
   styleUrl: './project-card.css'
 })
 export class ProjectCard {
-  @Input() project!: Project;
-  protected readonly StatusStyling = StatusStyling;
-  protected readonly StatusLabel = StatusLabel;
+  @Input() project!: ProjectResponse;
+  protected readonly StatusStyling = ProjectStatusStyling;
+  protected readonly StatusLabel = ProjectStatusLabel;
 }
