@@ -12,6 +12,7 @@ import com.polsl.backend.repository.ProjectRepository;
 import com.polsl.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import static com.polsl.backend.enums.ProjectStatus.ACTIVE;
 import static com.polsl.backend.enums.ProjectStatus.PENDING;
+import static com.polsl.backend.enums.UserRole.STUDENT;
 import static com.polsl.backend.enums.UserRole.SUPERVISOR;
 
 @Service
@@ -28,6 +30,19 @@ public class ProjectService {
 
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+
+    public List<ProjectResponse> getUserProjects(User user){
+
+        List<Project> projects = List.of();
+
+        if (user.getRole().equals(SUPERVISOR)) {
+            projects = projectRepository.findAllBySupervisorId(user.getId());
+        } else if (user.getRole().equals(STUDENT)) {
+            projects = projectRepository.findProjectsByStudentId(user.getId());
+        }
+
+        return projects.stream().map(ProjectResponse::fromProject).toList();
+    }
 
     public ProjectResponse create(User user, ProjectCreation projectData){
 

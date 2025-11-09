@@ -1,6 +1,7 @@
 package com.polsl.backend.dto.project;
 
 import com.polsl.backend.dto.user.UserResponse;
+import com.polsl.backend.enums.ProjectStatus;
 import com.polsl.backend.models.Project;
 import com.polsl.backend.models.ProjectMembership;
 
@@ -11,6 +12,7 @@ public record ProjectResponse(
     UUID id,
     String title,
     String description,
+    ProjectStatus status,
     List<MembershipResponse> members,
     UserResponse supervisor
 ) {
@@ -32,6 +34,7 @@ public record ProjectResponse(
                 project.getId(),
                 project.getTitle(),
                 project.getDescription(),
+                project.getStatus(),
                 memberDtos,
                 supervisorDto
         );
