@@ -1,4 +1,4 @@
-package com.polsl.backend.dto;
+package com.polsl.backend.dto.user;
 
 import com.polsl.backend.enums.UserRole;
 import com.polsl.backend.models.User;
@@ -17,7 +17,7 @@ public record UserResponse(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail(), // lub user.getUsername()
+                user.getEmail(),
                 user.getRole()
         );
     }
