@@ -28,11 +28,12 @@ export class AuthService {
       ;
   }
 
-  public get getUserStore(): UserData | null{
-    return this.userStore();
+  public get getUserStore(): Signal<UserData | null>{
+    return this.userStore;
   }
 
   public logout(): void {
+    this.http.post(this.API_URL + "/logout", {}, {withCredentials: true}).subscribe();
     this.userStore.set(null);
   }
 
