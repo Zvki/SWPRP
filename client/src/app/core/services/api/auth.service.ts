@@ -1,7 +1,7 @@
 import {inject, Injectable, signal, Signal} from '@angular/core';
-import {catchError, map, Observable, of} from 'rxjs';
+import {catchError, map, Observable, of, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {UserData} from '../../interfaces/user-data';
+import {UserResponse} from '../../interfaces/user-response';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +11,11 @@ export class AuthService {
   private http = inject(HttpClient)
   private API_URL = 'http://localhost:8080/swprp/auth'
 
-  private userStore = signal<UserData | null>(null);
+  private userStore = signal<UserResponse | null>(null);
 
 
   public login(credentials: {email: string, password: string}): Observable<boolean> {
-    return this.http.post<UserData>(this.API_URL + "/login",
+    return this.http.post<UserResponse>(this.API_URL + "/login",
       credentials,
       {withCredentials: true})
       .pipe(
@@ -28,7 +28,19 @@ export class AuthService {
       ;
   }
 
-  public get getUserStore(): Signal<UserData | null>{
+  public initUser(): void {
+    this.http.get<UserResponse>(`${this.API_URL}/me`, { withCredentials: true })
+      .pipe(
+        tap(user => this.userStore.set(user)),
+        catchError(() => {
+          this.userStore.set(null);
+          return of(null);
+        })
+      )
+      .subscribe();
+  }
+
+  public get getUserStore(): Signal<UserResponse | null>{
     return this.userStore;
   }
 

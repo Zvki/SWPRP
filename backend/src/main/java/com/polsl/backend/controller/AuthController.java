@@ -3,6 +3,7 @@ package com.polsl.backend.controller;
 import com.polsl.backend.dto.user.UserLogin;
 import com.polsl.backend.dto.user.UserRegister;
 import com.polsl.backend.dto.user.UserResponse;
+import com.polsl.backend.models.User;
 import com.polsl.backend.service.AuthService;
 import com.polsl.backend.utils.JwtCookieService;
 import com.polsl.backend.utils.JwtService;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,5 +43,10 @@ public class AuthController {
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         jwtCookieService.clearCookie(response);
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(UserResponse.fromUser(user));
     }
 }
