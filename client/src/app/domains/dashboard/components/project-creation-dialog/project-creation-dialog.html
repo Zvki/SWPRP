@@ -1,0 +1,68 @@
+<div mat-dialog-content class="justify-center bg-background text-foreground p-6">
+
+  <form [formGroup]="projectForm" class="flex flex-col gap-5 w-full max-w-lg mx-auto">
+
+    <mat-form-field class="w-full">
+      <mat-label>Tytuł projektu</mat-label>
+      <input matInput placeholder="Np. System rekomendacji filmów" formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Krótki opis</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Promotor</mat-label>
+      <input
+        type="text"
+        placeholder="Zacznij pisać, aby wyszukać..."
+        aria-label="Promotor"
+        matInput
+        [formControl]="supervisorInputControl"
+        [matAutocomplete]="auto">
+      <mat-autocomplete
+        autoActiveFirstOption
+        #auto="matAutocomplete"
+        (optionSelected)="onSupervisorSelected($event)">
+
+        @for(supervisor of filteredSupervisors$ | async; track supervisor.id){
+          <mat-option [value]="supervisor">{{ supervisor.name }}</mat-option>
+        }
+        @if ((filteredSupervisors$ | async)?.length === 0) {
+          <mat-option disabled>Nie znaleziono promotora.</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div formArrayName="emailInvites" class="flex flex-col gap-3">
+      @for (control of emailInvites.controls; track $index) {
+        <div class="flex items-center gap-2">
+          <mat-form-field class="flex-grow">
+            <mat-label>Email członka #{{ $index + 1 }}</mat-label>
+            <input matInput [formControlName]="$index" placeholder="example@domain.com">
+            @if (control.hasError('email')) {
+              <mat-error>Wprowadź poprawny adres e-mail.</mat-error>
+            }
+            @if (control.hasError('required')) {
+              <mat-error>E-mail jest wymagany.</mat-error>
+            }
+          </mat-form-field>
+          <button appButton size="icon" variant="destructive"
+                  (click)="removeEmailInvite($index)"
+                  aria-label="Usuń członka">
+            <i class="ri-delete-bin-6-line"></i>
+          </button>
+        </div>
+      }
+    </div>
+
+    <button type="button" appButton size="icon" variant="outline" (click)="addEmailInvite()" class="w-fit mt-1">
+      <i class="ri-add-large-line"></i>
+    </button>
+
+    <button type="submit" appButton variant="default" class="mt-6 self-end">
+      Utwórz projekt
+    </button>
+  </form>
+</div>
