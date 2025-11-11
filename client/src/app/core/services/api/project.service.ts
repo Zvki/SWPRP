@@ -10,7 +10,7 @@ import {UserResponse} from '../../interfaces/user-response';
 export class ProjectService {
 
   private http = inject(HttpClient)
-  private API_URL = 'http://localhost:8080/swprp/project'
+  private API_URL = 'http://localhost:4200/swprp/project'
 
   private projectsStore = signal<ProjectResponse[] | null>(null);
 

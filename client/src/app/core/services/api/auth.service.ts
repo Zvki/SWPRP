@@ -9,7 +9,7 @@ import {UserResponse} from '../../interfaces/user-response';
 export class AuthService {
 
   private http = inject(HttpClient)
-  private API_URL = 'http://localhost:8080/swprp/auth'
+  private API_URL = 'http://localhost:4200/swprp/auth'
 
   private userStore = signal<UserResponse | null>(null);
 
