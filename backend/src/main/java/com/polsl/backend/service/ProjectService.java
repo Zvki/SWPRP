@@ -3,8 +3,6 @@ package com.polsl.backend.service;
 import com.polsl.backend.dto.project.ProjectCreation;
 import com.polsl.backend.dto.project.ProjectResponse;
 import com.polsl.backend.enums.MembershipStatus;
-import com.polsl.backend.enums.ProjectStatus;
-import com.polsl.backend.enums.UserRole;
 import com.polsl.backend.models.Project;
 import com.polsl.backend.models.ProjectMembership;
 import com.polsl.backend.models.User;
@@ -12,7 +10,6 @@ import com.polsl.backend.repository.ProjectRepository;
 import com.polsl.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -59,8 +56,8 @@ public class ProjectService {
             project.getMembers().addAll(invites);
         } else {
 
-            var supervisor = userRepository.findById(projectData.supervisorId())
-                    .orElseThrow(()-> new EntityNotFoundException("Supervisor with id " + projectData.supervisorId() + " wasn't found"));
+            var supervisor = userRepository.findById(projectData.supervisor().id())
+                    .orElseThrow(()-> new EntityNotFoundException("Supervisor with id " + projectData.supervisor().id() + " wasn't found"));
 
             var membership = ProjectMembership.builder()
                     .project(project)

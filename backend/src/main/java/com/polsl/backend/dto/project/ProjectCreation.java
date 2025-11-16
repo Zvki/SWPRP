@@ -1,12 +1,13 @@
 package com.polsl.backend.dto.project;
 
+import com.polsl.backend.dto.user.UserResponse;
+
 import java.util.List;
-import java.util.UUID;
 
 public record ProjectCreation(
         String title,
     String description,
-    UUID supervisorId,
+    UserResponse supervisor,
     List<String> emailInvites
 ) {
 }

@@ -2,7 +2,6 @@ package com.polsl.backend.controller;
 
 import com.polsl.backend.dto.project.ProjectCreation;
 import com.polsl.backend.dto.project.ProjectResponse;
-import com.polsl.backend.models.Project;
 import com.polsl.backend.models.User;
 import com.polsl.backend.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +31,6 @@ public class ProjectController {
     public ResponseEntity<List<ProjectResponse>> getUserProjects(@AuthenticationPrincipal User user) {
         final var result = projectService.getUserProjects(user);
 
-        return ResponseEntity.status(HttpStatus.OK).body(result) ;
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
