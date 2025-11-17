@@ -1,5 +1,6 @@
 package com.polsl.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.polsl.backend.dto.user.UserRegister;
 import com.polsl.backend.enums.UserRole;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
