@@ -1,8 +1,8 @@
 package com.polsl.backend.controller;
 
+import com.polsl.backend.dto.activity.ActivityResponse;
 import com.polsl.backend.dto.activity.CommentRequest;
 import com.polsl.backend.models.User;
-import com.polsl.backend.models.activities.Activity;
 import com.polsl.backend.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class ActivityController {
     private final ActivityService activityService;
 
     @PostMapping("/comment")
-    public ResponseEntity<Activity> addComment(@RequestBody CommentRequest data, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ActivityResponse> addComment(@RequestBody CommentRequest data, @AuthenticationPrincipal User user) {
         var result = activityService.addComment(data, user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
