@@ -1,5 +1,6 @@
 package com.polsl.backend.models.activities;
 
+import com.polsl.backend.enums.ActivityType;
 import com.polsl.backend.models.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,9 @@ public abstract class ActivityReference {
     private User author;
 
     private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    private ActivityType type;
 
     @PrePersist
     protected void onCreate() {
