@@ -1,5 +1,6 @@
 package com.polsl.backend.models.activities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.polsl.backend.models.Project;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,17 +15,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @OneToOne
-    @JoinColumn(name = "reference_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "reference_id", unique = true)
     private ActivityReference reference;
 }

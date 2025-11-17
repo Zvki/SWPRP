@@ -2,14 +2,19 @@ package com.polsl.backend.models.activities;
 
 import com.polsl.backend.models.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@SuperBuilder
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class ActivityReference {
 
     @Id

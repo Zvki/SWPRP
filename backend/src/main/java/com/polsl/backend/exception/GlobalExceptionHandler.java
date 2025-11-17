@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> badCredentialsExceptionHandler(BadCredentialsException ex){
         log.warn("Bad credentials: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(createErrorMessage(ex.getMessage(), HttpStatus.UNAUTHORIZED.value(), singletonList(ex.getMessage())));
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorMessage> authorizationDeniedExceptionHandler(AuthorizationDeniedException ex){
+        log.warn("Authorization denied: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(createErrorMessage(ex.getMessage(), HttpStatus.FORBIDDEN.value(), singletonList(ex.getMessage())));
     }
 
     private ErrorMessage createErrorMessage(String message, Integer statusCode, List<String> errors){
