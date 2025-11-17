@@ -1,7 +1,6 @@
 package com.polsl.backend.repository;
 
 import com.polsl.backend.models.Project;
-import com.polsl.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
