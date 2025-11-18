@@ -26,14 +26,7 @@ public abstract class ActivityReference {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
-    private LocalDateTime createdAt;
-
     @Enumerated(EnumType.STRING)
     private ActivityType type;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 
 }

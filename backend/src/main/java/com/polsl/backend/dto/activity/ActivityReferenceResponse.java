@@ -14,7 +14,6 @@ import java.util.UUID;
 public record ActivityReferenceResponse(
         UUID id,
         UserResponse author,
-        LocalDateTime createdAt,
         ActivityType type,
         Map<String, Object> data
 ) {
@@ -33,7 +32,6 @@ public record ActivityReferenceResponse(
             return new ActivityReferenceResponse(
                     c.getId(),
                     UserResponse.fromUser(c.getAuthor()),
-                    c.getCreatedAt(),
                     ActivityType.COMMENT,
                     data
             );
@@ -43,7 +41,6 @@ public record ActivityReferenceResponse(
             return new ActivityReferenceResponse(
                     f.getId(),
                     UserResponse.fromUser(f.getAuthor()),
-                    f.getCreatedAt(),
                     ActivityType.FILE,
                     Map.of(
                             "name", f.getName(),
