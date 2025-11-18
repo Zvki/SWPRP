@@ -1,5 +1,6 @@
 package com.polsl.backend.service;
 
+import com.polsl.backend.dto.activity.ActivityListResponse;
 import com.polsl.backend.dto.activity.ActivityResponse;
 import com.polsl.backend.dto.activity.CommentRequest;
 import com.polsl.backend.enums.ActivityType;
@@ -14,6 +15,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +51,15 @@ public class ActivityService {
         var result = activityRepository.save(activity);
 
         return ActivityResponse.fromActivity(result);
+    }
+
+    @Transactional
+    public ActivityListResponse getAllByProjectId(UUID projectId){
+        var activities = activityRepository.findAllByProjectId(projectId);
+
+        var result = activities.stream().map(ActivityResponse::fromActivity).toList();
+
+        return new ActivityListResponse(result);
     }
 
 

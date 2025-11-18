@@ -1,9 +1,21 @@
 package com.polsl.backend.repository;
 
+import com.polsl.backend.dto.activity.ActivityResponse;
 import com.polsl.backend.models.activities.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ActivityRepository extends JpaRepository<Activity, UUID> {
+
+    @Query("""
+    SELECT DISTINCT a FROM Activity a
+    JOIN FETCH a.reference r
+    JOIN FETCH r.author
+    WHERE a.project.id = :projectId
+    ORDER BY a.createdAt ASC
+    """)
+    List<Activity> findAllByProjectId(UUID projectId);
 }
