@@ -30,4 +30,11 @@ export class ProjectService {
       ;
   }
 
+  public getProject(id: string): Observable<ProjectResponse> {
+    return this.http.get<ProjectResponse>(
+      `${this.API_URL}/${id}`,
+      { withCredentials: true }
+    );
+  }
+
 }

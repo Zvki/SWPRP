@@ -1,1 +1,75 @@
-<p>project-details works!</p>
+<div class="container mx-auto px-4 py-10">
+
+  <div class="border-b border-border pb-6 mb-8">
+    <h1 class="text-4xl font-bold tracking-tight flex items-center gap-4 text-foreground justify-between">
+      {{ project.title }}
+
+      <span class="text-sm px-3 py-1 rounded-full"
+            [ngClass]="ProjectStatusStyling[project.status]">
+        {{ ProjectStatusLabel[project.status] }}
+      </span>
+    </h1>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
+
+    <aside class="lg:col-span-1 space-y-6">
+
+      <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
+        <h2 class="text-lg font-semibold mb-3 text-foreground">Opiekun projektu</h2>
+
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-muted rounded-full"></div>
+          <div>
+            <p class="font-medium text-foreground/80">
+              {{ project.supervisor.firstName }} {{ project.supervisor.lastName }}
+            </p>
+            <p class="text-xs text-muted-foreground">{{ project.supervisor.email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
+        <h2 class="text-lg font-semibold mb-3 text-foreground">Członkowie</h2>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+               @for(m of project.members; track m.id){
+                 @if(m.student){
+            <div class="w-8 h-8 bg-muted rounded-full"></div>
+            <div class="leading-tight">
+              <p class="font-medium text-foreground/80">{{ m.student.firstName }} {{ m.student.lastName }}</p>
+              <p class="text-xs text-muted-foreground">{{ m.student.email }}</p>
+            </div>
+                 }
+               }
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <main class="lg:col-span-3">
+
+      <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-8">
+        <h2 class="text-xl font-semibold mb-4 text-foreground">Informacje o projekcie</h2>
+
+        <p class="text-muted-foreground leading-relaxed">
+          {{ project.description }}
+        </p>
+      </div>
+
+      <!-- COMMENTS SECTION – empty area in the center -->
+      <div class="bg-card border border-border rounded-lg p-4 shadow-sm">
+        <mat-tab-group>
+          <mat-tab label="Komentarze"> <app-comments [commentsTree]="commentsTree"></app-comments> </mat-tab>
+          <mat-tab label="Pliki"> Pliki </mat-tab>
+          <mat-tab label="Spotkania"> Spotkania </mat-tab>
+        </mat-tab-group>
+
+      </div>
+
+    </main>
+
+  </div>
+</div>
