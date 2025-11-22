@@ -28,6 +28,11 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
 
+    public ProjectResponse getProjectById(UUID id){
+        return ProjectResponse.fromProject(projectRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Project with id " + id + " wasn't found")));
+    }
+
     public List<ProjectResponse> getUserProjects(User user){
 
         List<Project> projects = List.of();
