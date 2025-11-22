@@ -1,0 +1,14 @@
+import {UserResponse} from '../user-response';
+import {ActivityType, FileActivityReference} from './activity.interface';
+
+export interface ActivityNode {
+  id: string,
+  activityId: string,
+  author: UserResponse,
+  type: ActivityType,
+  content?: string,
+  parentReferenceId?: string,
+  file?: FileActivityReference;
+  createdAt: Date,
+  children: ActivityNode[]
+}
