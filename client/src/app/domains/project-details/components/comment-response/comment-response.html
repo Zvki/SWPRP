@@ -1,0 +1,27 @@
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-card border border-border rounded-xl shadow-xl w-full max-w-lg p-6">
+
+    <h2 class="text-xl font-semibold mb-4 text-foreground">
+      Odpowiedź na komentarz
+    </h2>
+
+    <div class="mb-3 text-muted-foreground">
+      <strong class="text-foreground">{{ data.author.firstName }} {{ data.author.lastName }}</strong>:
+      {{ data.content }}
+    </div>
+
+    <form [formGroup]="form">
+      <textarea
+        formControlName="content"
+        rows="4"
+        placeholder="Napisz odpowiedź..."
+      ></textarea>
+
+      <div class="actions">
+        <button appButton variant="destructive" (click)="cancel()">Anuluj</button>
+        <button appButton (click)="submit()" [disabled]="form.invalid">
+          Wyślij
+        </button>
+      </div>
+    </form>
+</div>
