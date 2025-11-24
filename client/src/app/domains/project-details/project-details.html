@@ -59,11 +59,10 @@
         </p>
       </div>
 
-      <!-- COMMENTS SECTION – empty area in the center -->
       <div class="bg-card border border-border rounded-lg p-4 shadow-sm">
         <mat-tab-group>
-          <mat-tab label="Komentarze"> <app-comments [commentsTree]="commentsTree"></app-comments> </mat-tab>
-          <mat-tab label="Pliki"> Pliki </mat-tab>
+          <mat-tab label="Aktywności"> <app-activities [commentsTree]="commentsTree" [projectId]="projectId"></app-activities> </mat-tab>
+          <mat-tab label="Pliki"> <app-activities [commentsTree]="filesTree" [projectId]="projectId"></app-activities> </mat-tab>
           <mat-tab label="Spotkania"> Spotkania </mat-tab>
         </mat-tab-group>
 

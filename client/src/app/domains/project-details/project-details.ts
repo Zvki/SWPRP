@@ -8,13 +8,13 @@ import {
 } from '../../core/interfaces/project/project-response';
 import {NgClass} from '@angular/common';
 import {ActivityService} from '../../core/services/api/activity.service';
-import {Comments} from './components/comments/comments';
+import {Activities} from './components/activities/activities.component';
 import {MatTabsModule} from '@angular/material/tabs';
 
 @Component({
   imports: [
     NgClass,
-    Comments,
+    Activities,
     MatTabsModule
   ],
   selector: 'app-project-details',
@@ -26,7 +26,8 @@ export class ProjectDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly projectService = inject(ProjectService);
   private readonly activityService = inject(ActivityService);
-  protected commentsTree= this.activityService.commentsTree;
+  protected commentsTree= this.activityService.activityTree;
+  protected filesTree = this.activityService.filesTree;
   protected projectId!: string;
   protected project!: ProjectResponse;
 
@@ -39,6 +40,7 @@ export class ProjectDetails implements OnInit {
       });
 
     this.activityService.loadActivities(this.projectId);
+    this.activityService.loadFiles(this.projectId);
   }
 
   protected readonly ProjectStatusLabel = ProjectStatusLabel;
