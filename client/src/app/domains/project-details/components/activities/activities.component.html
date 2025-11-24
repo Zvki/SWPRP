@@ -8,3 +8,42 @@
     </app-activity-tree>
   </section>
 }
+
+<section class="mt-8 p-4 bg-card border border-border rounded-xl shadow-md flex flex-col gap-3">
+
+  <div class="flex-1">
+    <textarea
+      [(ngModel)]="rootCommentContent"
+      rows="3"
+      class="text-foreground w-full bg-card border border-border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Napisz nowy komentarz...">
+    </textarea>
+  </div>
+
+  <div class="flex justify-between items-end">
+
+    <div class="flex gap-2">
+      <button
+        appButton
+        variant="outline"
+        (click)="openFileUploadDialog()">
+        <i class="ri-file-add-line mr-2"></i> Dodaj Plik
+      </button>
+
+      <button
+        appButton
+        variant="outline"
+        (click)="openMeetingDialog()">
+        <i class="ri-calendar-event-line mr-2"></i> Dodaj Spotkanie
+      </button>
+    </div>
+
+    <button
+      appButton
+      size="sm"
+      variant="default"
+      (click)="sendRootComment()">
+      Wyślij Komentarz
+    </button>
+  </div>
+</section>
