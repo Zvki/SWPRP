@@ -40,5 +40,7 @@ export class ActivityNode {
     }
 
     this.activityService.addComment(data);
+    this.activityService.loadActivities(this.projectId);
+    this.content = '';
   }
 }
