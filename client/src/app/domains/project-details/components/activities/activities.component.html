@@ -1,0 +1,10 @@
+@if (commentsTree().length === 0) {
+  <p class="text-muted-foreground">Brak komentarzy.</p>
+} @else {
+  <section class="my-4">
+    <app-activity-tree
+      [list]="commentsTree()"
+      [projectId]="projectId">
+    </app-activity-tree>
+  </section>
+}

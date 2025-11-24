@@ -1,7 +1,7 @@
 import {UserResponse} from '../user-response';
 import {ActivityType, FileActivityReference} from './activity.interface';
 
-export interface ActivityNode {
+export interface ActivityNodeInterface {
   id: string,
   activityId: string,
   author: UserResponse,
@@ -10,5 +10,5 @@ export interface ActivityNode {
   parentReferenceId?: string,
   file?: FileActivityReference;
   createdAt: Date,
-  children: ActivityNode[]
+  children: ActivityNodeInterface[]
 }

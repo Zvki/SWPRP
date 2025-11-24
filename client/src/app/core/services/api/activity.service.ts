@@ -7,36 +7,56 @@ import {
   CommentActivityReference,
   FileActivityReference
 } from '../../interfaces/activity/activity.interface';
-import {ActivityNode} from '../../interfaces/activity/comment-node.interface';
+import {ActivityNodeInterface} from '../../interfaces/activity/activity-node.interface';
+import {CommentRequest} from '../../interfaces/activity/comment-request.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActivityService {
   private API_URL = 'http://localhost:4200/swprp/activity'
-  commentsTree = signal<ActivityNode[]>([]);
+  activityTree = signal<ActivityNodeInterface[]>([]);
+  filesTree = signal<ActivityNodeInterface[]>([]);
 
   private readonly http = inject(HttpClient);
 
   public loadActivities(projectId: string): void {
     this.http.get<ActivityList>(`${this.API_URL}/${projectId}`)
       .subscribe({
-        next: res => this.commentsTree.set(this.buildTree(res.activities)),
+        next: res => this.activityTree.set(this.buildTree(res.activities)),
         error: err => {
           console.error('Error loading activities', err);
-          this.commentsTree.set([]);
+          this.activityTree.set([]);
         }
       });
   }
 
-  private buildTree(activities: ActivityResponse[]): ActivityNode[] {
+  public loadFiles(projectId: string): void {
+    this.http.get<ActivityList>(`${this.API_URL}/${projectId}/files`)
+      .subscribe({
+        next: res => this.filesTree.set(this.buildTree(res.activities)),
+        error: err => {
+          console.error('Error loading files', err);
+          this.filesTree.set([]);
+        }
+      });
+  }
 
-    const map: Record<string, ActivityNode> = {};
-    const roots: ActivityNode[] = [];
+  public addComment(data: CommentRequest): void {
+    this.http.post(`${this.API_URL}/comment`, data)
+      .subscribe({
+        error: err => console.error('Error adding comment', err)
+      });
+  }
+
+  private buildTree(activities: ActivityResponse[]): ActivityNodeInterface[] {
+
+    const map: Record<string, ActivityNodeInterface> = {};
+    const roots: ActivityNodeInterface[] = [];
 
     for (const a of activities) {
 
-      const base: ActivityNode = {
+      const base: ActivityNodeInterface = {
         id: a.reference.id,
         activityId: a.id,
         type: a.reference.type,
@@ -53,7 +73,9 @@ export class ActivityService {
       }
 
       if (a.reference.type === ActivityType.FILE) {
-        base.file = a.reference.data as FileActivityReference;
+        const data = a.reference.data as FileActivityReference;
+        base.content = data.content;
+        base.file = data;
         base.parentReferenceId = undefined;
       }
 
@@ -75,7 +97,7 @@ export class ActivityService {
       }
     }
 
-    const sortTree = (arr: ActivityNode[]) => {
+    const sortTree = (arr: ActivityNodeInterface[]) => {
       arr.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
       arr.forEach(n => sortTree(n.children));
     };
