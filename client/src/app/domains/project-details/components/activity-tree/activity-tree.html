@@ -1,0 +1,19 @@
+<ul class="space-y-6">
+  @for (node of list; track node.id) {
+    <li>
+      <app-activity-node
+        [node]="node"
+        [projectId]="projectId">
+      </app-activity-node>
+
+      @if (node.children.length > 0) {
+        <div class="border-l border-border ml-6 pl-6 mt-4">
+          <app-activity-tree
+            [list]="node.children"
+            [projectId]="projectId">
+          </app-activity-tree>
+        </div>
+      }
+    </li>
+  }
+</ul>
