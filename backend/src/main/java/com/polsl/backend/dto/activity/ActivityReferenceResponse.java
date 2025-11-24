@@ -5,8 +5,8 @@ import com.polsl.backend.enums.ActivityType;
 import com.polsl.backend.models.activities.ActivityReference;
 import com.polsl.backend.models.activities.Comment;
 import com.polsl.backend.models.activities.File;
+import org.hibernate.Hibernate;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,6 +18,8 @@ public record ActivityReferenceResponse(
         Map<String, Object> data
 ) {
     public static ActivityReferenceResponse fromActivityReference(ActivityReference reference) {
+
+        reference = Hibernate.unproxy(reference, ActivityReference.class);
 
         if (reference instanceof Comment c) {
 
@@ -44,7 +46,7 @@ public record ActivityReferenceResponse(
                     ActivityType.FILE,
                     Map.of(
                             "name", f.getName(),
-                            "path", f.getPath(),
+                            "content", f.getContent(),
                             "url", f.getUrl()
                     )
             );

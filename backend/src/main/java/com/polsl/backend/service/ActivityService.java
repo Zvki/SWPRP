@@ -3,10 +3,12 @@ package com.polsl.backend.service;
 import com.polsl.backend.dto.activity.ActivityListResponse;
 import com.polsl.backend.dto.activity.ActivityResponse;
 import com.polsl.backend.dto.activity.CommentRequest;
+import com.polsl.backend.dto.activity.FileRequest;
 import com.polsl.backend.enums.ActivityType;
 import com.polsl.backend.models.User;
 import com.polsl.backend.models.activities.Activity;
 import com.polsl.backend.models.activities.Comment;
+import com.polsl.backend.models.activities.File;
 import com.polsl.backend.repository.ActivityReferenceRepository;
 import com.polsl.backend.repository.ActivityRepository;
 import com.polsl.backend.repository.ProjectRepository;
@@ -26,6 +28,8 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityReferenceRepository activityReferenceRepository;
     private final ProjectRepository projectRepository;
+
+    private final FileService fileService;
 
     @Transactional
     public ActivityResponse addComment(CommentRequest data, User author) {
@@ -54,10 +58,49 @@ public class ActivityService {
     }
 
     @Transactional
+    public ActivityResponse addFile(FileRequest data, User author) {
+        var project = projectRepository.findById(data.projectId())
+                .orElseThrow( () -> new EntityNotFoundException( "Project with id " + data.projectId() + " wasn't found"));
+
+        try {
+            var storedFile = fileService.storeFile(data.projectId(), data.file());
+
+            var file = File.builder()
+                    .type(ActivityType.FILE)
+                    .author(author)
+                    .name(data.file().getOriginalFilename())
+                    .content(data.content())
+                    .url(storedFile)
+                    .build();
+
+            var activity = Activity.builder()
+                    .project(project)
+                    .reference(file)
+                    .build();
+
+            var result = activityRepository.save(activity);
+
+            return ActivityResponse.fromActivity(result);
+        } catch (Exception e){
+            log.error("Error while storing file: " + e.getMessage());
+            throw new RuntimeException("Error while storing file");
+        }
+    }
+
+    @Transactional
     public ActivityListResponse getAllByProjectId(UUID projectId){
         var activities = activityRepository.findAllByProjectId(projectId);
 
         var result = activities.stream().map(ActivityResponse::fromActivity).toList();
+
+        return new ActivityListResponse(result);
+    }
+
+    @Transactional
+    public ActivityListResponse getAllProjectFiles(UUID id){
+        var files = activityRepository.findAllByProject_IdAndReference_Type(id, ActivityType.FILE);
+
+        var result = files.stream().map(ActivityResponse::fromActivity).toList();
 
         return new ActivityListResponse(result);
     }

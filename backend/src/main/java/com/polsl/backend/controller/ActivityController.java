@@ -3,6 +3,7 @@ package com.polsl.backend.controller;
 import com.polsl.backend.dto.activity.ActivityListResponse;
 import com.polsl.backend.dto.activity.ActivityResponse;
 import com.polsl.backend.dto.activity.CommentRequest;
+import com.polsl.backend.dto.activity.FileRequest;
 import com.polsl.backend.models.User;
 import com.polsl.backend.service.ActivityService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,23 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    @PostMapping("/file")
+    public ResponseEntity<ActivityResponse> addFile(@ModelAttribute FileRequest data, @AuthenticationPrincipal User user) {
+        var result = activityService.addFile(data, user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
     @GetMapping("/{projectId}")
     public ResponseEntity<ActivityListResponse> getProjectActivities(@PathVariable UUID projectId) {
         var result = activityService.getAllByProjectId(projectId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/{projectId}/files")
+    public ResponseEntity<ActivityListResponse> getProjectFiles(@PathVariable UUID projectId) {
+        var result = activityService.getAllProjectFiles(projectId);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
