@@ -17,6 +17,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class File extends ActivityReference {
     private String name;
-    private String path;
+    private String content;
     private String url;
 }
