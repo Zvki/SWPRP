@@ -1,67 +1,50 @@
 <h2 mat-dialog-title class="text-xl font-bold border-b pb-2">Utwórz Nowe Spotkanie</h2>
 
-<div mat-dialog-content class="space-y-4 py-4">
+<form [formGroup]="meetingForm" (ngSubmit)="onCreateMeeting()">
+  <div mat-dialog-content class="space-y-4 py-4">
 
-  <div>
-    <label class="text-sm font-medium text-foreground block mb-1">Tytuł spotkania<span class="text-red-500">*</span></label>
-    <input
-      type="text"
-      [(ngModel)]="title"
-      class="w-full border border-border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-      placeholder="Np. Omówienie Raportu Q3">
-  </div>
+    <mat-form-field class="w-full">
+      <mat-label>Tytuł spotkania</mat-label>
+      <input matInput formControlName="title" placeholder="Np. Omówienie Raportu Q3" required>
+    </mat-form-field>
 
-  <div class="flex gap-4">
-    <div class="flex-1">
-      <label class="text-sm font-medium text-foreground block mb-1">Data<span class="text-red-500">*</span></label>
-      <input
-        type="date"
-        [(ngModel)]="meetingDate"
-        class="w-full border border-border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+    <div class="flex gap-4">
+      <mat-form-field>
+        <mat-label>Meeting date</mat-label>
+        <input matInput [matDatepicker]="datepicker" formControlName="meetingDate">
+        <mat-datepicker #datepicker/>
+        <mat-datepicker-toggle [for]="datepicker" matSuffix/>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Meeting time</mat-label>
+        <input matInput
+               formControlName="meetingDate"
+               [matTimepicker]="timepicker">
+        <mat-timepicker #timepicker/>
+        <mat-timepicker-toggle [for]="timepicker" matSuffix/>
+      </mat-form-field>
     </div>
-    <div class="flex-1">
-      <label class="text-sm font-medium text-foreground block mb-1">Czas<span class="text-red-500">*</span></label>
-      <input
-        type="time"
-        [(ngModel)]="meetingTime"
-        class="w-full border border-border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-    </div>
+
+    <mat-form-field class="w-full">
+      <mat-label>Link do Spotkania (URL)</mat-label>
+      <input matInput type="url" formControlName="url" placeholder="Np. https://zoom.us/j/123456">
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Opis</mat-label>
+      <textarea matInput formControlName="content" rows="3" placeholder="Dodatkowe informacje o agendzie..."></textarea>
+    </mat-form-field>
   </div>
 
-  <div>
-    <label class="text-sm font-medium text-foreground block mb-1">Link do Spotkania (URL)</label>
-    <input
-      type="url"
-      [(ngModel)]="meetingUrl"
-      class="w-full border border-border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-      placeholder="Np. https://zoom.us/j/123456">
+  <div mat-dialog-actions align="end" class="border-t pt-3">
+    <button appButton variant="destructive" (click)="onCancel()" type="button">Anuluj</button>
+    <button
+      appButton
+      variant="default"
+      type="submit"
+      [disabled]="!meetingForm.valid">
+        Utwórz Spotkanie
+    </button>
   </div>
-
-  <div>
-    <label class="text-sm font-medium text-foreground block mb-1">Opis</label>
-    <textarea
-      [(ngModel)]="description"
-      rows="3"
-      class="w-full border border-border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-      placeholder="Dodatkowe informacje o agendzie..."></textarea>
-  </div>
-
-  @if (submitError) {
-    <p class="text-red-500 text-sm">{{ submitError }}</p>
-  }
-</div>
-
-<div mat-dialog-actions align="end" class="border-t pt-3">
-  <button appButton variant="destructive" (click)="onCancel()" [disabled]="loading">Anuluj</button>
-  <button
-    appButton
-    variant="default"
-    (click)="onCreateMeeting()"
-    [disabled]="loading || !title || !meetingDate || !meetingTime">
-    @if (loading) {
-      <i class="ri-loader-4-line animate-spin mr-1"></i> Tworzenie...
-    } @else {
-      Utwórz Spotkanie
-    }
-  </button>
-</div>
+</form>

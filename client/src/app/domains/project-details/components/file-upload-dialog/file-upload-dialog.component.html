@@ -1,59 +1,39 @@
 <h2 mat-dialog-title class="text-xl font-bold border-b pb-2">Dodaj nowy plik</h2>
 
-<div mat-dialog-content class="space-y-6 py-4">
+<div mat-dialog-content class="space-y-6 py-4" [formGroup]="fileForm">
 
   <div class="border border-dashed border-border p-4 rounded-lg bg-muted/20">
     <label for="fileInput" class="cursor-pointer block text-center">
       <div class="text-3xl mb-2"><i class="ri-file-add-line mr-2"></i></div>
       <div class="font-medium text-foreground">
-        {{ selectedFile ? selectedFile.name : 'Kliknij lub przeciągnij, aby wybrać plik' }}
+        {{ file ? file.name : 'Kliknij lub przeciągnij, aby wybrać plik' }}
       </div>
     </label>
     <input
       id="fileInput"
       type="file"
       (change)="onFileSelected($event)"
-      class="hidden"
-      [disabled]="uploading">
+      class="hidden"/>
   </div>
 
   <div>
     <label class="text-sm font-medium text-muted-foreground block mb-1">Opcjonalny komentarz do pliku:</label>
     <textarea
-      [(ngModel)]="fileComment"
       rows="3"
       class="w-full border border-border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-      placeholder="Dodaj opis, kontekst lub uwagi..."></textarea>
+      placeholder="Dodaj opis, kontekst lub uwagi..."
+      formControlName="content"></textarea>
   </div>
 
-  @if (uploading) {
-    <div class="mt-4">
-      <p class="text-sm text-primary mb-1">Wgrywanie: {{ uploadProgress | number:'1.0-0' }}%</p>
-      <div class="h-2 bg-muted rounded-full">
-        <div
-          class="h-full bg-primary rounded-full transition-all duration-300"
-          [style.width.%]="uploadProgress">
-        </div>
-      </div>
-    </div>
-  }
-
-  @if (uploadError) {
-    <p class="text-red-500 text-sm mt-2">{{ uploadError }}</p>
-  }
 </div>
 
 <div mat-dialog-actions align="end" class="border-t pt-3">
-  <button appButton variant="destructive" (click)="onCancel()" [disabled]="uploading">Anuluj</button>
+  <button appButton variant="destructive" (click)="onCancel()">Anuluj</button>
   <button
     appButton
     variant="default"
     (click)="onUpload()"
-    [disabled]="!selectedFile || uploading">
-    @if (uploading) {
-      <i class="ri-loader-4-line animate-spin mr-1"></i> Wgrywanie...
-    } @else {
-      Wgraj Plik
-    }
+    [disabled]="fileForm.invalid">
+    Wgraj Plik
   </button>
 </div>

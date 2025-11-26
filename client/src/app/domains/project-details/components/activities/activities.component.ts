@@ -41,27 +41,19 @@ export class Activities implements AfterViewInit{
 
   protected sendRootComment(): void {
     if (!this.rootCommentContent || this.rootCommentContent.trim().length === 0) return;
-
     const data: CommentRequest = {
       content: this.rootCommentContent,
       projectId: this.projectId
     }
-
     this.activityService.addComment(data);
-    this.activityService.loadActivities(this.projectId);
     this.rootCommentContent = '';
   }
 
   protected openFileUploadDialog() {
     this.dialog.open(FileUploadDialogComponent, {
-      // przekazanie danych, np. ID projektu do uploadu
       data: { projectId: this.projectId },
       width: '500px'
-    }).afterClosed().subscribe(result => {
-      if (result === 'uploaded') {
-        // this.activityService.refreshActivities();
-      }
-    });
+    })
   }
 
   openMeetingDialog() {
@@ -71,11 +63,6 @@ export class Activities implements AfterViewInit{
       },
       width: '550px',
       disableClose: true
-    }).afterClosed().subscribe(result => {
-      if (result === 'created') {
-        console.log("Nowe spotkanie zostało utworzone.");
-        // this.activityService.refreshActivities(); // Przykładowe odświeżenie
-      }
-    });
+    })
   }
 }

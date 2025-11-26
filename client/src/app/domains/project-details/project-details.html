@@ -63,7 +63,7 @@
         <mat-tab-group>
           <mat-tab label="Aktywności"> <app-activities [commentsTree]="commentsTree" [projectId]="projectId"></app-activities> </mat-tab>
           <mat-tab label="Pliki"> <app-activities [commentsTree]="filesTree" [projectId]="projectId"></app-activities> </mat-tab>
-          <mat-tab label="Spotkania"> Spotkania </mat-tab>
+          <mat-tab label="Spotkania"> <app-activities [commentsTree]="meetingsTree" [projectId]="projectId"></app-activities> </mat-tab>
         </mat-tab-group>
 
       </div>

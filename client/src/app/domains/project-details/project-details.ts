@@ -28,6 +28,7 @@ export class ProjectDetails implements OnInit {
   private readonly activityService = inject(ActivityService);
   protected commentsTree= this.activityService.activityTree;
   protected filesTree = this.activityService.filesTree;
+  protected meetingsTree = this.activityService.meetingTree;
   protected projectId!: string;
   protected project!: ProjectResponse;
 
@@ -41,6 +42,7 @@ export class ProjectDetails implements OnInit {
 
     this.activityService.loadActivities(this.projectId);
     this.activityService.loadFiles(this.projectId);
+    this.activityService.loadMeetings(this.projectId);
   }
 
   protected readonly ProjectStatusLabel = ProjectStatusLabel;

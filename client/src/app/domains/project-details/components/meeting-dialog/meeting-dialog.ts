@@ -1,76 +1,83 @@
-import {Component, Inject, inject} from '@angular/core';
+import {Component, Inject, inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import { ActivityService } from '../../../../core/services/api/activity.service';
-import {FormsModule} from '@angular/forms';
+import {ActivityService} from '../../../../core/services/api/activity.service';
+import {
+  FormBuilder, FormControl,
+  FormGroup,
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms'; // Nowy import
 import {ButtonDirective} from '../../../../shared/ui/button/button-directive';
+import {MatInputModule} from '@angular/material/input'; // Nowy import
+import {MatDatepickerModule} from '@angular/material/datepicker'; // Nowy import
+import {MatNativeDateModule, provideNativeDateAdapter} from '@angular/material/core'; // Wymagany dla Datepicker
+import {MatTimepickerModule} from '@angular/material/timepicker';
+import {MeetingRequest} from '../../../../core/interfaces/activity/meeting-request.interface'; // Do formatowania daty przed wysłaniem
 
 interface DialogData {
   projectId: string;
 }
 
-interface MeetingRequest {
-  projectId: string;
-  title: string;
-  url: string;
-  dateTime: Date;
-  description: string;
+export interface MeetingData {
+  title: FormControl<string>;
+  url: FormControl<string>;
+  meetingDate: FormControl<Date>;
+  content: FormControl<string | null>;
 }
 
 @Component({
   selector: 'app-meeting-dialog',
+  standalone: true,
   imports: [
     MatDialogModule,
+    ReactiveFormsModule,
+    ButtonDirective,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTimepickerModule,
+    MatDatepickerModule,
     FormsModule,
-    ButtonDirective
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './meeting-dialog.html',
   styleUrl: './meeting-dialog.css',
 })
 export class MeetingDialog {
   private readonly dialogRef = inject(MatDialogRef<MeetingDialog>);
   private readonly activityService = inject(ActivityService);
+  private readonly fb = inject(FormBuilder);
+
+  value: Date = new Date();
+
+  meetingForm: FormGroup = this.initMeetingForm();
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
-  title: string = '';
-  meetingDate: string = new Date().toISOString().substring(0, 10);
-  meetingTime: string = '10:00';
-  meetingUrl: string = 'https://meet.google.com/';
-  description: string = '';
 
-  loading: boolean = false;
-  submitError: string | null = null;
-
-
-  async onCreateMeeting(): Promise<void> {
-    if (!this.title || !this.meetingDate || !this.meetingTime) {
-      this.submitError = "Tytuł, data i godzina są wymagane.";
-      return;
-    }
-
-    const dateTime = new Date(`${this.meetingDate}T${this.meetingTime}:00`);
-
-    const requestData: MeetingRequest = {
+  onCreateMeeting(): void {
+    if (this.meetingForm.invalid) return;
+    const formValue = this.meetingForm.value;
+    const data: MeetingRequest = {
       projectId: this.data.projectId,
-      title: this.title,
-      url: this.meetingUrl,
-      dateTime: dateTime,
-      description: this.description
-    };
-
-    this.loading = true;
-    this.submitError = null;
-
-    try {
-      this.dialogRef.close('created');
-    } catch (error) {
-      this.submitError = "Nie udało się utworzyć spotkania. Spróbuj ponownie.";
-      console.error(error);
-      this.loading = false;
+        ...formValue,
     }
+    this.activityService.addMeeting(data);
+    this.dialogRef.close();
   }
 
-  onCancel(): void {
+  protected onCancel(): void {
     this.dialogRef.close();
+  }
+
+  private initMeetingForm(): FormGroup {
+    return this.fb.group<MeetingData>({
+      title: new FormControl('', { nonNullable: true, validators: Validators.required}),
+      meetingDate: new FormControl(new Date(), { nonNullable: true, validators: Validators.required}),
+      url: new FormControl('', { nonNullable: true, validators: Validators.required}),
+      content: new FormControl('')
+    });
   }
 }
