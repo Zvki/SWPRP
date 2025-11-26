@@ -1,0 +1,37 @@
+<div class="p-6 bg-white dark:bg-gray-800 rounded-lg max-w-lg mx-auto">
+
+  <h2 mat-dialog-title class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b pb-3">
+    Dodaj członka do projektu
+  </h2>
+
+  <form (ngSubmit)="onSubmit()" class="space-y-6">
+
+    <div class="space-y-2">
+      <label for="memberEmail" class="text-sm font-medium leading-none text-gray-700 dark:text-gray-300">
+        Adres e-mail użytkownika
+      </label>
+
+      <input id="memberEmail" [formControl]="emailFormControl" placeholder="np. jan.kowalski@example.com"
+             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+             type="email">
+
+      @if (emailFormControl.touched) {
+        @if (emailFormControl.hasError('required')) {
+          <p class="text-xs text-red-500 mt-1">Adres e-mail jest wymagany.</p>
+        } @else if (emailFormControl.hasError('email')) {
+          <p class="text-xs text-red-500 mt-1">Wprowadź prawidłowy format adresu e-mail.</p>
+        }
+      }
+    </div>
+
+    <mat-dialog-actions align="end" class="pt-4 border-t dark:border-gray-700">
+      <button appButton variant="outline" (click)="onCancelClick()" type="button">
+        Anuluj
+      </button>
+      <button appButton type="submit" [disabled]="emailFormControl.invalid">
+        Dodaj Członka
+      </button>
+    </mat-dialog-actions>
+
+  </form>
+</div>

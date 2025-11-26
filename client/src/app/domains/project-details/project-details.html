@@ -1,5 +1,6 @@
 <div class="container mx-auto px-4 py-10">
 
+  @if(project){
   <div class="border-b border-border pb-6 mb-8">
     <h1 class="text-4xl font-bold tracking-tight flex items-center gap-4 text-foreground justify-between">
       {{ project.title }}
@@ -19,7 +20,6 @@
         <h2 class="text-lg font-semibold mb-3 text-foreground">Opiekun projektu</h2>
 
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-muted rounded-full"></div>
           <div>
             <p class="font-medium text-foreground/80">
               {{ project.supervisor.firstName }} {{ project.supervisor.lastName }}
@@ -30,13 +30,17 @@
       </div>
 
       <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
-        <h2 class="text-lg font-semibold mb-3 text-foreground">Członkowie</h2>
+
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold text-foreground m-0">Członkowie</h2>
+
+          <button appButton variant="outline" size="icon" (click)="toggleAddMemberDialog()"><i class="ri-add-line"></i></button>
+        </div>
 
         <div class="space-y-4">
           <div class="flex items-center gap-3">
                @for(m of project.members; track m.id){
-                 @if(m.student){
-            <div class="w-8 h-8 bg-muted rounded-full"></div>
+                 @if(m.status === MembershipStatus.ACCEPTED){
             <div class="leading-tight">
               <p class="font-medium text-foreground/80">{{ m.student.firstName }} {{ m.student.lastName }}</p>
               <p class="text-xs text-muted-foreground">{{ m.student.email }}</p>
@@ -71,4 +75,8 @@
     </main>
 
   </div>
+  } @else {
+      <h1 class="text-3xl font-bold text-primary">Ładowanie szczegółów projektu...</h1>
+      <p class="text-muted-foreground mt-2">Proszę czekać, pobieranie danych.</p>
+  }
 </div>
