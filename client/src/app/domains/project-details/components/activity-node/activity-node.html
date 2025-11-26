@@ -15,11 +15,14 @@
         </span>
       </div>
 
-      <div class="text-foreground/90 leading-relaxed whitespace-pre-line">
-        {{ node.content }}
-      </div>
+      @if(node.type !== ActivityType.MEETING) {
+        <div class="text-foreground/90 leading-relaxed whitespace-pre-line">
+          {{ node.content }}
+        </div>
+      }
 
-      @if(node.type === 'FILE' && node.file !== null) {
+
+      @if(node.type === ActivityType.FILE && node.file !== null) {
         <div class="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/30">
 
           <div class="w-10 h-10 rounded-md bg-muted flex items-center justify-center text-xl">
@@ -42,6 +45,40 @@
         </div>
       }
 
+      @if(node.type === ActivityType.MEETING && node.meeting !== null) {
+        <div class="flex items-start gap-3 p-3 border border-primary/50 rounded-lg bg-primary/10 mt-3">
+
+          <div class="w-10 h-10 rounded-md bg-primary/20 text-primary flex items-center justify-center text-xl shrink-0">
+            📅
+          </div>
+
+          <div class="flex-1 space-y-1">
+            <div class="text-primary font-bold">
+              {{ node.meeting?.title }}
+            </div>
+            <div class="text-sm text-foreground/80">
+              <i class="ri-time-line mr-1"></i>
+              {{ node.meeting?.date | date:'medium' }}
+            </div>
+
+            @if (node.meeting?.content) {
+              <div class="text-xs text-muted-foreground mt-1 whitespace-pre-line">
+                {{ node.meeting?.content }}
+              </div>
+            }
+          </div>
+
+          <a [href]="node.meeting?.url"
+             target="_blank"
+             class="shrink-0"
+          >
+            <button appButton size="sm">
+              <i class="ri-external-link-line mr-1"></i> Przejdź
+            </button>
+          </a>
+
+        </div>
+      }
     </div>
   </div>
 

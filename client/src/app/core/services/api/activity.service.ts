@@ -5,10 +5,12 @@ import {
   ActivityResponse,
   ActivityType,
   CommentActivityReference,
-  FileActivityReference
+  FileActivityReference, MeetingActivityReference
 } from '../../interfaces/activity/activity.interface';
 import {ActivityNodeInterface} from '../../interfaces/activity/activity-node.interface';
 import {CommentRequest} from '../../interfaces/activity/comment-request.interface';
+import {MeetingRequest} from '../../interfaces/activity/meeting-request.interface';
+import {FileRequest} from '../../interfaces/activity/file-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +19,7 @@ export class ActivityService {
   private API_URL = 'http://localhost:4200/swprp/activity'
   activityTree = signal<ActivityNodeInterface[]>([]);
   filesTree = signal<ActivityNodeInterface[]>([]);
+  meetingTree = signal<ActivityNodeInterface[]>([]);
 
   private readonly http = inject(HttpClient);
 
@@ -42,12 +45,52 @@ export class ActivityService {
       });
   }
 
+  public loadMeetings(projectId: string): void {
+    this.http.get<ActivityList>(`${this.API_URL}/${projectId}/meetings`)
+      .subscribe({
+        next: res => this.meetingTree.set(this.buildTree(res.activities)),
+        error: err => {
+          console.error('Error loading meetings', err);
+          this.meetingTree.set([]);
+        }
+      });
+  }
+
   public addComment(data: CommentRequest): void {
     this.http.post(`${this.API_URL}/comment`, data)
       .subscribe({
+        next: () => this.refreshActivities(data.projectId),
         error: err => console.error('Error adding comment', err)
       });
   }
+
+  public addFile(data: FileRequest): void {
+    const formData = new FormData();
+    formData.append('projectId', data.projectId);
+    formData.append('file', data.file);
+    formData.append('content', data.content);
+
+    this.http.post(`${this.API_URL}/file`, formData)
+      .subscribe({
+        next: () => this.refreshActivities(data.projectId),
+        error: err => console.error('Error adding file', err)
+      });
+  }
+
+  public addMeeting(data: MeetingRequest): void {
+    this.http.post(`${this.API_URL}/meeting`, data)
+    .subscribe({
+      next: () => this.refreshActivities(data.projectId),
+      error: err => console.error('Error adding meeting', err)
+    });
+  }
+
+  public refreshActivities(projectId: string): void {
+    this.loadActivities(projectId);
+    this.loadFiles(projectId);
+    this.loadMeetings(projectId);
+  }
+
 
   private buildTree(activities: ActivityResponse[]): ActivityNodeInterface[] {
 
@@ -76,6 +119,13 @@ export class ActivityService {
         const data = a.reference.data as FileActivityReference;
         base.content = data.content;
         base.file = data;
+        base.parentReferenceId = undefined;
+      }
+
+      if (a.reference.type === ActivityType.MEETING) {
+        const data = a.reference.data as MeetingActivityReference;
+        base.meeting = data;
+        base.content = data.content;
         base.parentReferenceId = undefined;
       }
 

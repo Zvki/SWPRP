@@ -5,6 +5,7 @@ import {CommentRequest} from '../../../../core/interfaces/activity/comment-reque
 import {ActivityNodeInterface} from '../../../../core/interfaces/activity/activity-node.interface';
 import {ActivityService} from '../../../../core/services/api/activity.service';
 import {DatePipe} from '@angular/common';
+import {ActivityType} from '../../../../core/interfaces/activity/activity.interface';
 
 
 @Component({
@@ -40,7 +41,8 @@ export class ActivityNode {
     }
 
     this.activityService.addComment(data);
-    this.activityService.loadActivities(this.projectId);
     this.content = '';
   }
+
+  protected readonly ActivityType = ActivityType;
 }
