@@ -30,7 +30,7 @@ export class Header {
   }
 
   protected toggleLoginDialog(): void {
-    const dialogRef = this.dialog.open(SigninDialog,{
+    this.dialog.open(SigninDialog,{
       panelClass: "bg-background"
     })
   }
