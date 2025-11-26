@@ -52,17 +52,18 @@ export class Activities implements AfterViewInit{
   protected openFileUploadDialog() {
     this.dialog.open(FileUploadDialogComponent, {
       data: { projectId: this.projectId },
-      width: '500px'
+      maxWidth: '100%',
+      width: '30%'
     })
   }
 
-  openMeetingDialog() {
+  protected openMeetingDialog() {
     this.dialog.open(MeetingDialog, {
       data: {
         projectId: this.projectId
       },
-      width: '550px',
-      disableClose: true
+      maxWidth: '100%',
+      width: '30%'
     })
   }
 }
