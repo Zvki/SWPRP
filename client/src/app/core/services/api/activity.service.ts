@@ -11,6 +11,7 @@ import {ActivityNodeInterface} from '../../interfaces/activity/activity-node.int
 import {CommentRequest} from '../../interfaces/activity/comment-request.interface';
 import {MeetingRequest} from '../../interfaces/activity/meeting-request.interface';
 import {FileRequest} from '../../interfaces/activity/file-request.interface';
+import {Observable, tap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -56,33 +57,38 @@ export class ActivityService {
       });
   }
 
-  public addComment(data: CommentRequest): void {
-    this.http.post(`${this.API_URL}/comment`, data)
-      .subscribe({
-        next: () => this.refreshActivities(data.projectId),
-        error: err => console.error('Error adding comment', err)
-      });
+  public addComment(data: CommentRequest): Observable<Object> {
+    return this.http.post(`${this.API_URL}/comment`, data)
+      .pipe(
+        tap({
+          next: () => this.refreshActivities(data.projectId),
+          error: err => console.error('Error adding comment', err)
+        })
+      );
   }
 
-  public addFile(data: FileRequest): void {
+  public addFile(data: FileRequest): Observable<Object> {
     const formData = new FormData();
     formData.append('projectId', data.projectId);
     formData.append('file', data.file);
     formData.append('content', data.content);
 
-    this.http.post(`${this.API_URL}/file`, formData)
-      .subscribe({
-        next: () => this.refreshActivities(data.projectId),
-        error: err => console.error('Error adding file', err)
-      });
+    return this.http.post(`${this.API_URL}/file`, formData)
+      .pipe(
+        tap({
+          next: () => this.refreshActivities(data.projectId),
+          error: err => console.error('Error adding file', err)
+        })
+      );
   }
 
-  public addMeeting(data: MeetingRequest): void {
-    this.http.post(`${this.API_URL}/meeting`, data)
-    .subscribe({
-      next: () => this.refreshActivities(data.projectId),
-      error: err => console.error('Error adding meeting', err)
-    });
+  public addMeeting(data: MeetingRequest): Observable<Object> {
+    return this.http.post(`${this.API_URL}/meeting`, data).pipe(
+      tap({
+        next: () => this.refreshActivities(data.projectId),
+        error: err => console.error('Error adding meeting', err)
+      })
+    );
   }
 
   public refreshActivities(projectId: string): void {

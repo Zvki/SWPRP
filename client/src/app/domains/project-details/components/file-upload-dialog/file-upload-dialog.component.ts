@@ -38,7 +38,7 @@ export class FileUploadDialogComponent {
 
   protected readonly fileForm = this.initFileForm();
 
-  onFileSelected(event: Event): void {
+  protected onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.fileForm.get('file')?.setValue(input.files[0]);
@@ -47,7 +47,7 @@ export class FileUploadDialogComponent {
     }
   }
 
-  onUpload(): void {
+  protected onUpload(): void {
     if (this.fileForm.invalid) return;
     const formValue = this.fileForm.value;
     const data: FileRequest = {
@@ -55,8 +55,9 @@ export class FileUploadDialogComponent {
       ...formValue,
     }
 
-    this.activityService.addFile(data);
-    this.dialogRef.close();
+    this.activityService.addFile(data).subscribe({
+      next: () => this.dialogRef.close(),
+    })
   }
 
   onCancel(): void {

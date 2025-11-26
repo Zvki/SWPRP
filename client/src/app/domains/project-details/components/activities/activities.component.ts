@@ -45,8 +45,9 @@ export class Activities implements AfterViewInit{
       content: this.rootCommentContent,
       projectId: this.projectId
     }
-    this.activityService.addComment(data);
-    this.rootCommentContent = '';
+    this.activityService.addComment(data).subscribe({
+      next: () => this.rootCommentContent = '',
+    })
   }
 
   protected openFileUploadDialog() {

@@ -63,8 +63,9 @@ export class MeetingDialog {
       projectId: this.data.projectId,
         ...formValue,
     }
-    this.activityService.addMeeting(data);
-    this.dialogRef.close();
+    this.activityService.addMeeting(data).subscribe({
+      next: () => this.dialogRef.close(),
+    })
   }
 
   protected onCancel(): void {
