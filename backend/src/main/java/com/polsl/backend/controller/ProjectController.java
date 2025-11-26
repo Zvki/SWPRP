@@ -1,6 +1,6 @@
 package com.polsl.backend.controller;
 
-import com.polsl.backend.dto.project.ProjectCreation;
+import com.polsl.backend.dto.project.ProjectRequest;
 import com.polsl.backend.dto.project.ProjectResponse;
 import com.polsl.backend.models.User;
 import com.polsl.backend.service.ProjectService;
@@ -22,7 +22,7 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(@AuthenticationPrincipal User user,
-                                                         @RequestBody ProjectCreation projectData) {
+                                                         @RequestBody ProjectRequest projectData) {
         final var result = projectService.create(user, projectData);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
@@ -40,5 +40,11 @@ public class ProjectController {
         final var result = projectService.getProjectById(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> changeProjectStatus(@PathVariable UUID id){
+        projectService.changeStatus(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
