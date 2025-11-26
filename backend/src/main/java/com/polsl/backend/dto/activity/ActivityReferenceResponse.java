@@ -5,6 +5,7 @@ import com.polsl.backend.enums.ActivityType;
 import com.polsl.backend.models.activities.ActivityReference;
 import com.polsl.backend.models.activities.Comment;
 import com.polsl.backend.models.activities.File;
+import com.polsl.backend.models.activities.Meeting;
 import org.hibernate.Hibernate;
 
 import java.util.HashMap;
@@ -48,6 +49,20 @@ public record ActivityReferenceResponse(
                             "name", f.getName(),
                             "content", f.getContent(),
                             "url", f.getUrl()
+                    )
+            );
+        }
+
+        if (reference instanceof Meeting m) {
+            return new ActivityReferenceResponse(
+                    m.getId(),
+                    UserResponse.fromUser(m.getAuthor()),
+                    ActivityType.MEETING,
+                    Map.of(
+                            "title", m.getTitle(),
+                            "content", m.getContent(),
+                            "url", m.getUrl(),
+                            "date", m.getStartTime()
                     )
             );
         }

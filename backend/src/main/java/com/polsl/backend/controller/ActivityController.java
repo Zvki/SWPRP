@@ -1,9 +1,6 @@
 package com.polsl.backend.controller;
 
-import com.polsl.backend.dto.activity.ActivityListResponse;
-import com.polsl.backend.dto.activity.ActivityResponse;
-import com.polsl.backend.dto.activity.CommentRequest;
-import com.polsl.backend.dto.activity.FileRequest;
+import com.polsl.backend.dto.activity.*;
 import com.polsl.backend.models.User;
 import com.polsl.backend.service.ActivityService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +32,13 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    @PostMapping("/meeting")
+    public ResponseEntity<ActivityResponse> addMeeting(@RequestBody MeetingRequest data, @AuthenticationPrincipal User user) {
+        var result = activityService.addMeeting(data, user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
     @GetMapping("/{projectId}")
     public ResponseEntity<ActivityListResponse> getProjectActivities(@PathVariable UUID projectId) {
         var result = activityService.getAllByProjectId(projectId);
@@ -46,6 +50,12 @@ public class ActivityController {
     public ResponseEntity<ActivityListResponse> getProjectFiles(@PathVariable UUID projectId) {
         var result = activityService.getAllProjectFiles(projectId);
 
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/{projectId}/meetings")
+    public ResponseEntity<ActivityListResponse> getProjectMeetings(@PathVariable UUID projectId) {
+        var result = activityService.getAllProjectMeetings(projectId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
