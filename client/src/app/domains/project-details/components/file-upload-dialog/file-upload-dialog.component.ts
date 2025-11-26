@@ -37,6 +37,7 @@ export class FileUploadDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   protected readonly fileForm = this.initFileForm();
+  protected isLoading = false;
 
   protected onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -54,9 +55,12 @@ export class FileUploadDialogComponent {
       projectId: this.data.projectId,
       ...formValue,
     }
-
+    this.isLoading = true;
     this.activityService.addFile(data).subscribe({
-      next: () => this.dialogRef.close(),
+      next: () => {
+        this.dialogRef.close()
+        this.isLoading = false;
+      },
     })
   }
 

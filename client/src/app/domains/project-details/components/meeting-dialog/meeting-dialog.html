@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="text-xl font-bold border-b pb-2">Utwórz Nowe Spotkanie</h2>
+<h2 mat-dialog-title class="text-xl font-bold border-b pb-2">Utwórz nowe spotkanie</h2>
 
 <form [formGroup]="meetingForm" (ngSubmit)="onCreateMeeting()">
   <div mat-dialog-content class="space-y-4 py-4">
@@ -37,13 +37,13 @@
     </mat-form-field>
   </div>
 
-  <div mat-dialog-actions align="end" class="border-t pt-3">
-    <button appButton variant="destructive" (click)="onCancel()" type="button">Anuluj</button>
+  <div mat-dialog-actions align="end" class="border-t pt-3 gap-2">
+    <button appButton variant="destructive" (click)="onCancel()" [disabled]="isLoading" type="button">Anuluj</button>
     <button
       appButton
       variant="default"
       type="submit"
-      [disabled]="!meetingForm.valid">
+      [disabled]="!meetingForm.valid || isLoading">
         Utwórz Spotkanie
     </button>
   </div>

@@ -54,7 +54,8 @@ export class Activities implements AfterViewInit{
     this.dialog.open(FileUploadDialogComponent, {
       data: { projectId: this.projectId },
       maxWidth: '100%',
-      width: '30%'
+      width: '30%',
+      disableClose: true
     })
   }
 
@@ -64,7 +65,8 @@ export class Activities implements AfterViewInit{
         projectId: this.projectId
       },
       maxWidth: '100%',
-      width: '30%'
+      width: '30%',
+      disableClose: true
     })
   }
 }

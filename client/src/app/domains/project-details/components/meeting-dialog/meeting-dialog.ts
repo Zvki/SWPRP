@@ -49,14 +49,14 @@ export class MeetingDialog {
   private readonly activityService = inject(ActivityService);
   private readonly fb = inject(FormBuilder);
 
-  value: Date = new Date();
-
-  meetingForm: FormGroup = this.initMeetingForm();
+  protected meetingForm: FormGroup = this.initMeetingForm();
+  protected isLoading = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
 
   onCreateMeeting(): void {
+    this.isLoading = true;
     if (this.meetingForm.invalid) return;
     const formValue = this.meetingForm.value;
     const data: MeetingRequest = {
@@ -64,7 +64,10 @@ export class MeetingDialog {
         ...formValue,
     }
     this.activityService.addMeeting(data).subscribe({
-      next: () => this.dialogRef.close(),
+      next: () => {
+        this.dialogRef.close()
+        this.isLoading = false;
+      },
     })
   }
 
