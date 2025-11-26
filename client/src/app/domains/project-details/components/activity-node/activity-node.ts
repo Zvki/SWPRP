@@ -1,4 +1,4 @@
-import {Component, inject, Input, Output} from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {ButtonDirective} from '../../../../shared/ui/button/button-directive';
 import {CommentRequest} from '../../../../core/interfaces/activity/comment-request.interface';

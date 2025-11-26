@@ -15,7 +15,7 @@ export interface ActivityReference {
   id: string,
   author: UserResponse,
   type: ActivityType,
-  data: CommentActivityReference | FileActivityReference
+  data: CommentActivityReference | FileActivityReference | MeetingActivityReference
 }
 
 export interface CommentActivityReference {
@@ -29,7 +29,15 @@ export interface FileActivityReference {
   url: string
 }
 
+export interface MeetingActivityReference {
+  title: string,
+  content: string,
+  url: string
+  date: Date
+}
+
 export enum ActivityType {
   COMMENT = "COMMENT",
-  FILE = "FILE"
+  FILE = "FILE",
+  MEETING = "MEETING"
 }
