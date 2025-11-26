@@ -1,0 +1,48 @@
+<div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg mx-auto border border-gray-200 dark:border-gray-700">
+
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 border-b pb-3">
+    Utwórz Nowy Projekt
+  </h2>
+
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+    <div class="space-y-2">
+      <label for="title" class="text-sm font-medium leading-none text-gray-700 dark:text-gray-300">Tytuł Projektu</label>
+      <input id="title" matInput formControlName="title"
+             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+    </div>
+
+    <div class="space-y-2">
+      <label for="description" class="text-sm font-medium leading-none text-gray-700 dark:text-gray-300">Opis Projektu</label>
+      <textarea id="description" matInput formControlName="description" rows="4"
+                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none">
+      </textarea>
+    </div>
+
+    @if (user()?.role === UserRole.STUDENT) {
+      <div class="space-y-2">
+        <label for="supervisor" class="text-sm font-medium leading-none text-gray-700 dark:text-gray-300">Opiekun Projektu</label>
+
+        <mat-select formControlName="supervisorId" id="supervisor"
+                    class="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+
+          @for (supervisor of supervisors(); track supervisor.id) {
+            <mat-option [value]="supervisor.id" class="text-gray-700 dark:text-gray-300">
+              {{ supervisor.firstName }} {{ supervisor.lastName }} ({{ supervisor.email }})
+            </mat-option>
+          }
+        </mat-select>
+      </div>
+    }
+
+    <div class="flex justify-end space-x-3 pt-4 border-t dark:border-gray-700">
+      <button appButton variant="outline" mat-dialog-close type="button">
+        Anuluj
+      </button>
+      <button appButton type="submit" [disabled]="!projectForm.valid ">
+          Utwórz Projekt
+      </button>
+    </div>
+
+  </form>
+</div>
