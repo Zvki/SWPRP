@@ -22,7 +22,7 @@ export class Header {
   protected readonly authService = inject(AuthService);
   protected readonly themeService = inject(Theme)
 
-  user = this.authService.getUserStore;
+  user = this.authService.user;
 
   onLogout() {
     console.log('Wylogowano');

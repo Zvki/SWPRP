@@ -11,7 +11,7 @@ export class AuthService {
   private http = inject(HttpClient)
   private API_URL = 'http://localhost:4200/swprp/auth'
 
-  private userStore = signal<UserResponse | null>(null);
+  private readonly _user = signal<UserResponse | null>(null);
 
 
   public login(credentials: {email: string, password: string}): Observable<boolean> {
@@ -20,7 +20,7 @@ export class AuthService {
       {withCredentials: true})
       .pipe(
         map(user => {
-          this.userStore.set(user);
+          this._user.set(user);
           return true;
         }),
           catchError(() => of(false))
@@ -31,22 +31,22 @@ export class AuthService {
   public initUser(): void {
     this.http.get<UserResponse>(`${this.API_URL}/me`, { withCredentials: true })
       .pipe(
-        tap(user => this.userStore.set(user)),
+        tap(user => this._user.set(user)),
         catchError(() => {
-          this.userStore.set(null);
+          this._user.set(null);
           return of(null);
         })
       )
       .subscribe();
   }
 
-  public get getUserStore(): Signal<UserResponse | null>{
-    return this.userStore;
+  public get user(): Signal<UserResponse | null>{
+    return this._user;
   }
 
   public logout(): void {
     this.http.post(this.API_URL + "/logout", {}, {withCredentials: true}).subscribe();
-    this.userStore.set(null);
+    this._user.set(null);
   }
 
 }

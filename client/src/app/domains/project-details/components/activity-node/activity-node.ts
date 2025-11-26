@@ -29,8 +29,6 @@ export class ActivityNode {
 
   protected content: string = '';
 
-
-
   onSendReply() {
     if (!this.content || this.content.trim().length === 0) return;
 
@@ -40,8 +38,9 @@ export class ActivityNode {
       parentId: this.node.id
     }
 
-    this.activityService.addComment(data);
-    this.content = '';
+    this.activityService.addComment(data).subscribe({
+      next: () => this.content = ''
+    });
   }
 
   protected readonly ActivityType = ActivityType;

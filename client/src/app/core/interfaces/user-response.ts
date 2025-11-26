@@ -6,7 +6,7 @@ export interface UserResponse {
   role: UserRole
 }
 
-enum UserRole {
-  STUDENT,
-  SUPERVISOR
+export enum UserRole {
+  STUDENT = 'STUDENT',
+  SUPERVISOR = 'SUPERVISOR'
 }

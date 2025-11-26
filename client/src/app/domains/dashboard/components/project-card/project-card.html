@@ -24,23 +24,17 @@
       </span></span>
     </div>
 
-<!--    <div class="pt-2">-->
-<!--      <div class="flex justify-between mb-1">-->
-<!--        <span class="text-sm font-medium text-foreground/90">Postęp</span>-->
-<!--        <span class="text-sm font-medium text-indigo-600">{{ project.progress }}%</span>-->
-<!--      </div>-->
-<!--      <div class="w-full bg-gray-200 rounded-full h-2.5">-->
-<!--        <div class="bg-indigo-600 h-2.5 rounded-full" [style.width]="project.progress + '%'"></div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
-  <div class="p-6 bg-background border-t border-gray-200 rounded-b-lg">
-    <div class="flex justify-end space-x-3">
-      <button appButton variant="default" (click)="goToDetails(project)">
-        Zobacz szczegóły
-      </button>
+    <div class="p-6 bg-background border-t border-gray-200 rounded-b-lg">
+      <div class="flex justify-beetwen space-x-3">
+        <button appButton variant="default" (click)="goToDetails(project)">
+          Zobacz szczegóły
+        </button>
+        @if(user()?.role === UserRole.SUPERVISOR && project.status === ProjectStatus.PENDING){
+          <button appButton variant="outline" (click)="changeStatus(project.id)">
+            Zaakceptuj
+          </button>
+        }
+      </div>
     </div>
-  </div>
 
-</div>
+  </div>
