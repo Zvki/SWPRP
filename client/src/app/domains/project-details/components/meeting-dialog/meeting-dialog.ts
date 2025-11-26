@@ -1,11 +1,10 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {Component, Inject, inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ActivityService} from '../../../../core/services/api/activity.service';
 import {
   FormBuilder, FormControl,
   FormGroup,
   FormsModule,
-  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms'; // Nowy import
