@@ -1,20 +1,12 @@
 package com.polsl.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.polsl.backend.dto.user.UserRegister;
 import com.polsl.backend.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "\"user\"")
@@ -23,10 +15,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class User implements UserDetails {
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -37,36 +28,8 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password")
-    private String password;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    public static User build(UserRegister user, String password){
-        return User
-                .builder()
-                .firstName(user.firstName())
-                .lastName(user.lastName())
-                .email(user.email())
-                .password(password)
-                .role(user.role())
-                .build();
-    }
 }

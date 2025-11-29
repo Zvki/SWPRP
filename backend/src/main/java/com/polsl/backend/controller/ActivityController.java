@@ -1,12 +1,13 @@
 package com.polsl.backend.controller;
 
 import com.polsl.backend.dto.activity.*;
-import com.polsl.backend.models.User;
 import com.polsl.backend.service.ActivityService;
+import com.polsl.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,23 +18,27 @@ import java.util.UUID;
 public class ActivityController {
 
     private final ActivityService activityService;
+    private final AuthService authService;
 
     @PostMapping("/comment")
-    public ResponseEntity<ActivityResponse> addComment(@RequestBody CommentRequest data, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ActivityResponse> addComment(@RequestBody CommentRequest data, @AuthenticationPrincipal Jwt jwt) {
+        final var user = authService.getUser(jwt);
         var result = activityService.addComment(data, user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PostMapping("/file")
-    public ResponseEntity<ActivityResponse> addFile(@ModelAttribute FileRequest data, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ActivityResponse> addFile(@ModelAttribute FileRequest data, @AuthenticationPrincipal Jwt jwt) {
+        final var user = authService.getUser(jwt);
         var result = activityService.addFile(data, user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PostMapping("/meeting")
-    public ResponseEntity<ActivityResponse> addMeeting(@RequestBody MeetingRequest data, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ActivityResponse> addMeeting(@RequestBody MeetingRequest data, @AuthenticationPrincipal Jwt jwt) {
+        final var user = authService.getUser(jwt);
         var result = activityService.addMeeting(data, user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);

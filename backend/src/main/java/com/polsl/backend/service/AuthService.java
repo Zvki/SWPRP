@@ -1,50 +1,46 @@
 package com.polsl.backend.service;
 
-import com.polsl.backend.dto.user.UserLogin;
-import com.polsl.backend.dto.user.UserRegister;
-import com.polsl.backend.models.LinkedAccount;
+import com.polsl.backend.enums.UserRole;
 import com.polsl.backend.models.User;
 import com.polsl.backend.repository.UserRepository;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import static com.polsl.backend.enums.Provider.EMAIL;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public User register(UserRegister userData) {
+    public User getUser(Jwt jwt) {
+        String id = jwt.getSubject();
 
-        if(userRepository.findByEmail(userData.email()).isPresent()){
-            throw new EntityExistsException("User with email " + userData.email() + " already exists");
-        }
+        return userRepository.findById(id).orElseGet(() -> createUser(jwt));
+    }
 
-        final var hashPwd = passwordEncoder.encode(userData.password());
-        final var user = User.build(userData, hashPwd);
-        final var account = LinkedAccount.builder()
-                .user(user)
-                .provider(EMAIL)
-                .providerUserId(user.getEmail())
+    public User createUser(Jwt jwt) {
+        String id = jwt.getSubject();
+        String email = jwt.getClaim("email");
+        String firstName = jwt.getClaim("given_name");
+        String lastName = jwt.getClaim("family_name");
+
+        Map<String, Object> realmAccess = jwt.getClaim("realm_access");
+        List<String> roles = realmAccess != null ? (List<String>) realmAccess.get("roles") : List.of();
+        UserRole role = !roles.contains("STUDENT") ? UserRole.SUPERVISOR : UserRole.STUDENT;
+
+        User newUser = User.builder()
+                .id(id)
+                .email(email)
+                .firstName(firstName)
+                .lastName(lastName)
+                .role(role)
                 .build();
 
-        return userRepository.save(user);
+        return userRepository.save(newUser);
     }
 
-    public User login(UserLogin userData) {
-        final var user = userRepository.findByEmail(userData.email())
-                .orElseThrow(() -> new EntityNotFoundException("User with email " + userData.email() + " wasn't found"));
-
-        if(!passwordEncoder.matches(userData.password(), user.getPassword())){
-            throw new BadCredentialsException("Invalid password");
-        }
-        return user;
-    }
 }
