@@ -5,11 +5,9 @@ import com.polsl.backend.dto.project.MembershipResponse;
 import com.polsl.backend.dto.project.ProjectRequest;
 import com.polsl.backend.dto.project.ProjectResponse;
 import com.polsl.backend.enums.MembershipStatus;
-import com.polsl.backend.enums.ProjectStatus;
 import com.polsl.backend.models.Project;
 import com.polsl.backend.models.ProjectMembership;
 import com.polsl.backend.models.User;
-import com.polsl.backend.repository.ProjectMembershipRepository;
 import com.polsl.backend.repository.ProjectRepository;
 import com.polsl.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +15,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +29,6 @@ public class ProjectService {
 
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
-    private final ProjectMembershipRepository projectMembershipRepository;
 
     public ProjectResponse getProjectById(UUID id){
         return ProjectResponse.fromProject(projectRepository.findById(id)
@@ -110,9 +106,7 @@ public class ProjectService {
             project.getMembers().add(membership);
             projectRepository.save(project);
 
-            var result = projectMembershipRepository.save(membership);
-
-            return MembershipResponse.fromMembership(result);
+            return MembershipResponse.fromMembership(membership);
     }
 
 }

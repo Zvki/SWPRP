@@ -33,7 +33,7 @@ public class SecurityConfig {
         http.cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/user/activate-membership/**").permitAll()
                         .requestMatchers("/user/**").hasRole("STUDENT")
                         .anyRequest().authenticated()
                 )

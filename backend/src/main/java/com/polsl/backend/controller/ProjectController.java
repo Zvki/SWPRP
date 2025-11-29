@@ -1,5 +1,7 @@
 package com.polsl.backend.controller;
 
+import com.polsl.backend.dto.project.MembershipRequest;
+import com.polsl.backend.dto.project.MembershipResponse;
 import com.polsl.backend.dto.project.ProjectRequest;
 import com.polsl.backend.dto.project.ProjectResponse;
 import com.polsl.backend.models.User;
@@ -46,5 +48,11 @@ public class ProjectController {
     public ResponseEntity<Void> changeProjectStatus(@PathVariable UUID id){
         projectService.changeStatus(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @PostMapping("/add-member")
+    public ResponseEntity<MembershipResponse> addMember(@RequestBody MembershipRequest data){
+        final var result = projectService.createMembership(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }
