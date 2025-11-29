@@ -50,6 +50,7 @@ export class ProjectDetails implements OnInit {
 
   protected toggleAddMemberDialog(): void {
     this.dialog.open(AddMemberDialog, {
+      data: { projectId: this.projectId },
       maxWidth: '100%',
       width: '30%',
     })

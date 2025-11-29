@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ProjectResponse} from '../../interfaces/project/project-response';
 import {catchError, map, Observable, of, tap} from 'rxjs';
 import {ProjectRequest} from '../../interfaces/project/project-request.interface';
+import {MembershipRequest} from '../../interfaces/project/membership-request.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -52,4 +53,7 @@ export class ProjectService {
     });
   }
 
+  public addMember(data: MembershipRequest): void {
+    this.http.post(`${this.API_URL}/add-member`, data, {withCredentials: true}).subscribe();
+  }
 }

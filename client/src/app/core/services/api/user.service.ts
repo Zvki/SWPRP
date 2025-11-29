@@ -13,7 +13,7 @@ export class UserService {
 
   private _supervisors = signal<UserResponse[] | null>(null);
 
-  public get supervisors(): Signal<UserResponse[] | null>{
+  public get supervisors(): Signal<UserResponse[] | null> {
     return this._supervisors;
   }
 
@@ -26,5 +26,4 @@ export class UserService {
         catchError(() => of(false))
       ).subscribe();
   }
-
 }

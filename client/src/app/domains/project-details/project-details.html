@@ -38,7 +38,6 @@
         </div>
 
         <div class="space-y-4">
-          <div class="flex items-center gap-3">
                @for(m of project.members; track m.id){
                  @if(m.status === MembershipStatus.ACCEPTED){
             <div class="leading-tight">
@@ -47,7 +46,6 @@
             </div>
                  }
                }
-          </div>
         </div>
       </div>
 
