@@ -1,5 +1,6 @@
 package com.polsl.backend.service;
 
+import com.polsl.backend.dto.activity.StatusRequest;
 import com.polsl.backend.dto.project.MembershipRequest;
 import com.polsl.backend.dto.project.MembershipResponse;
 import com.polsl.backend.dto.project.ProjectRequest;
@@ -80,10 +81,10 @@ public class ProjectService {
         return ProjectResponse.fromProject(result);
     }
 
-    public void changeStatus(UUID projectId){
-        var project = projectRepository.findById(projectId)
-                .orElseThrow(()-> new EntityNotFoundException("Project with id " + projectId + " wasn't found"));
-        project.setStatus(ACTIVE);
+    public void changeStatus(StatusRequest data){
+        var project = projectRepository.findById(data.id())
+                .orElseThrow(()-> new EntityNotFoundException("Project with id " + data.id() + " wasn't found"));
+        project.setStatus(data.status());
         projectRepository.save(project);
     }
 

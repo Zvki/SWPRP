@@ -1,5 +1,6 @@
 package com.polsl.backend.controller;
 
+import com.polsl.backend.dto.activity.StatusRequest;
 import com.polsl.backend.dto.project.MembershipRequest;
 import com.polsl.backend.dto.project.MembershipResponse;
 import com.polsl.backend.dto.project.ProjectRequest;
@@ -48,9 +49,9 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> changeProjectStatus(@PathVariable UUID id) {
-        projectService.changeStatus(id);
+    @PatchMapping("/status")
+    public ResponseEntity<Void> changeProjectStatus(@RequestBody StatusRequest data) {
+        projectService.changeStatus(data);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 

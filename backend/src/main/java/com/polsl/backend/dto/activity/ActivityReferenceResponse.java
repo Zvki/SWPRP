@@ -46,6 +46,7 @@ public record ActivityReferenceResponse(
                     UserResponse.fromUser(f.getAuthor()),
                     ActivityType.FILE,
                     Map.of(
+                            "originalName", f.getOriginalName(),
                             "name", f.getName(),
                             "content", f.getContent(),
                             "url", f.getUrl()

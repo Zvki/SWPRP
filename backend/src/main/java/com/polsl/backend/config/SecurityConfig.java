@@ -24,7 +24,9 @@ public class SecurityConfig {
         http.
                 csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.anyRequest().authenticated());
+                        auth
+                                .requestMatchers("/user/activate-membership/*").permitAll()
+                                .anyRequest().authenticated());
 
         http.oauth2ResourceServer(oauth -> oauth
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));

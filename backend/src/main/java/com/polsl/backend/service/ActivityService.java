@@ -2,6 +2,7 @@ package com.polsl.backend.service;
 
 import com.polsl.backend.dto.activity.*;
 import com.polsl.backend.enums.ActivityType;
+import com.polsl.backend.models.Project;
 import com.polsl.backend.models.User;
 import com.polsl.backend.models.activities.Activity;
 import com.polsl.backend.models.activities.Comment;
@@ -66,9 +67,10 @@ public class ActivityService {
             var file = File.builder()
                     .type(ActivityType.FILE)
                     .author(author)
-                    .name(data.file().getOriginalFilename())
+                    .originalName(data.file().getOriginalFilename())
                     .content(data.content())
-                    .url(storedFile)
+                    .url(storedFile._1())
+                    .name(storedFile._2())
                     .build();
 
             var activity = Activity.builder()
@@ -80,7 +82,6 @@ public class ActivityService {
 
             return ActivityResponse.fromActivity(result);
         } catch (Exception e){
-            log.error("Error while storing file: " + e.getMessage());
             throw new RuntimeException("Error while storing file");
         }
     }
@@ -126,6 +127,7 @@ public class ActivityService {
         var result = meetings.stream().map(ActivityResponse::fromActivity).toList();
         return new ActivityListResponse(result);
     }
+
 
 
 }
