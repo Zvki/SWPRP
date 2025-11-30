@@ -1,7 +1,9 @@
-<h2 mat-dialog-title class="text-xl font-bold border-b pb-2">Utwórz nowe spotkanie</h2>
+<h2 mat-dialog-title class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b pb-3">
+  Utwórz nowe spotkanie
+</h2>
 
 <form [formGroup]="meetingForm" (ngSubmit)="onCreateMeeting()">
-  <div mat-dialog-content class="space-y-4 py-4">
+  <mat-dialog-content class="space-y-4 py-4">
 
     <mat-form-field class="w-full">
       <mat-label>Tytuł spotkania</mat-label>
@@ -9,15 +11,15 @@
     </mat-form-field>
 
     <div class="flex gap-4">
-      <mat-form-field>
-        <mat-label>Meeting date</mat-label>
+      <mat-form-field class="w-1/2">
+        <mat-label>Data spotkania</mat-label>
         <input matInput [matDatepicker]="datepicker" formControlName="meetingDate">
         <mat-datepicker #datepicker/>
         <mat-datepicker-toggle [for]="datepicker" matSuffix/>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Meeting time</mat-label>
+      <mat-form-field class="w-1/2">
+        <mat-label>Godzina spotkania</mat-label>
         <input matInput
                formControlName="meetingDate"
                [matTimepicker]="timepicker">
@@ -35,16 +37,17 @@
       <mat-label>Opis</mat-label>
       <textarea matInput formControlName="content" rows="3" placeholder="Dodatkowe informacje o agendzie..."></textarea>
     </mat-form-field>
-  </div>
+  </mat-dialog-content>
 
-  <div mat-dialog-actions align="end" class="border-t pt-3 gap-2">
-    <button appButton variant="destructive" (click)="onCancel()" [disabled]="isLoading" type="button">Anuluj</button>
+  <div mat-dialog-actions align="end" class="border-t pt-3 gap-3">
+    <button appButton variant="outline" (click)="onCancel()" type="button" [disabled]="isLoading">
+      Anuluj
+    </button>
     <button
       appButton
-      variant="default"
       type="submit"
       [disabled]="!meetingForm.valid || isLoading">
-        Utwórz Spotkanie
+      Utwórz Spotkanie
     </button>
   </div>
 </form>

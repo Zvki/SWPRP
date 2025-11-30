@@ -1,48 +1,43 @@
-<div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg mx-auto border border-gray-200 dark:border-gray-700">
+<h2 mat-dialog-title class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b pb-3">
+  Utwórz Nowy Projekt
+</h2>
 
-  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 border-b pb-3">
-    Utwórz Nowy Projekt
-  </h2>
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content class="space-y-4 py-4">
 
-  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <mat-form-field class="w-full">
+      <mat-label>Tytuł projektu</mat-label>
+      <input matInput placeholder="np. Analiza obliczeniowa czegoś" formControlName="title">
+    </mat-form-field>
 
-    <div class="space-y-2">
-      <label for="title" class="text-sm font-medium leading-none text-gray-700 dark:text-gray-300">Tytuł Projektu</label>
-      <input id="title" matInput formControlName="title"
-             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-    </div>
-
-    <div class="space-y-2">
-      <label for="description" class="text-sm font-medium leading-none text-gray-700 dark:text-gray-300">Opis Projektu</label>
-      <textarea id="description" matInput formControlName="description" rows="4"
-                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none">
+    <mat-form-field class="w-full">
+      <mat-label>Opis projektu</mat-label>
+      <textarea matInput formControlName="description" rows="4" placeholder="Dodatkowe informacje o projekcie...">
       </textarea>
-    </div>
+    </mat-form-field>
+
 
     @if (user()?.role === UserRole.STUDENT) {
-      <div class="space-y-2">
-        <label for="supervisor" class="text-sm font-medium leading-none text-gray-700 dark:text-gray-300">Opiekun Projektu</label>
-
-        <mat-select formControlName="supervisorId" id="supervisor"
-                    class="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+      <mat-form-field class="w-full">
+        <mat-label>Wybierz promotora</mat-label>
+        <mat-select formControlName="supervisorId" id="supervisor">
 
           @for (supervisor of supervisors(); track supervisor.id) {
-            <mat-option [value]="supervisor.id" class="text-gray-700 dark:text-gray-300">
+            <mat-option [value]="supervisor.id">
               {{ supervisor.firstName }} {{ supervisor.lastName }} ({{ supervisor.email }})
             </mat-option>
           }
         </mat-select>
-      </div>
+      </mat-form-field>
     }
+  </mat-dialog-content>
 
-    <div class="flex justify-end space-x-3 pt-4 border-t dark:border-gray-700">
-      <button appButton variant="outline" mat-dialog-close type="button">
-        Anuluj
-      </button>
-      <button appButton type="submit" [disabled]="!projectForm.valid ">
-          Utwórz Projekt
-      </button>
-    </div>
-
-  </form>
-</div>
+  <div mat-dialog-actions align="end" class="border-t pt-3 gap-3">
+    <button appButton variant="outline" mat-dialog-close type="button">
+      Anuluj
+    </button>
+    <button appButton type="submit" [disabled]="!projectForm.valid">
+      Utwórz Projekt
+    </button>
+  </div>
+</form>

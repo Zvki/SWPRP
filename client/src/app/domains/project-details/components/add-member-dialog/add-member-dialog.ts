@@ -4,11 +4,15 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/
 import {ButtonDirective} from '../../../../shared/ui/button/button-directive';
 import {MembershipRequest} from '../../../../core/interfaces/project/membership-request.interface';
 import {ProjectService} from '../../../../core/services/api/project.service';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-add-member-dialog',
   imports: [
     ButtonDirective,
+    MatFormFieldModule,
+    MatInputModule,
     MatDialogModule,
     FormsModule,
     ReactiveFormsModule
@@ -22,7 +26,8 @@ export class AddMemberDialog {
   private readonly dialogRef = inject(MatDialogRef<AddMemberDialog>);
   private readonly fb = inject(FormBuilder);
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {projectId: string}) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { projectId: string }) {
+  }
 
   protected emailFormControl = this.fb.nonNullable.control('', [Validators.required, Validators.email]);
 
@@ -31,7 +36,7 @@ export class AddMemberDialog {
   }
 
   protected onSubmit(): void {
-    if(this.emailFormControl.invalid) return;
+    if (this.emailFormControl.invalid) return;
 
     const data: MembershipRequest = {
       email: this.emailFormControl.value,

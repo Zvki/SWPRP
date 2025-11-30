@@ -1,39 +1,42 @@
-<h2 mat-dialog-title class="text-xl font-bold border-b pb-2">Dodaj nowy plik</h2>
+<h2 mat-dialog-title class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b pb-3">
+  Dodaj nowy plik
+</h2>
 
-<div mat-dialog-content class="space-y-6 py-4" [formGroup]="fileForm">
+<div [formGroup]="fileForm">
+  <mat-dialog-content class="space-y-4 py-4">
+    <div class="border border-dashed border-border p-4 rounded-lg bg-muted/20">
+      <label for="fileInput" class="cursor-pointer block text-center">
+        <div class="text-3xl mb-2"><i class="ri-file-add-line mr-2"></i></div>
+        <div class="font-medium text-foreground">
+          {{ file ? file.name : 'Kliknij lub przeciągnij, aby wybrać plik' }}
+        </div>
+      </label>
+      <input
+        id="fileInput"
+        type="file"
+        (change)="onFileSelected($event)"
+        class="hidden"/>
+    </div>
 
-  <div class="border border-dashed border-border p-4 rounded-lg bg-muted/20">
-    <label for="fileInput" class="cursor-pointer block text-center">
-      <div class="text-3xl mb-2"><i class="ri-file-add-line mr-2"></i></div>
-      <div class="font-medium text-foreground">
-        {{ file ? file.name : 'Kliknij lub przeciągnij, aby wybrać plik' }}
-      </div>
-    </label>
-    <input
-      id="fileInput"
-      type="file"
-      (change)="onFileSelected($event)"
-      class="hidden"/>
+    <mat-form-field class="w-full">
+      <mat-label>Opcjonalny komentarz do pliku</mat-label>
+      <textarea matInput
+                rows="2"
+                placeholder="Dodaj opis, kontekst lub uwagi..."
+                formControlName="content"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <div mat-dialog-actions align="end" class="border-t pt-3 gap-3">
+    <button appButton variant="outline" (click)="onCancel()" type="button" [disabled]="isLoading">
+      Anuluj
+    </button>
+    <button
+      appButton
+      type="button"
+      (click)="onUpload()"
+      [disabled]="!file || fileForm.invalid || isLoading">
+      Prześlij plik
+    </button>
   </div>
-
-  <div>
-    <label class="text-sm font-medium text-muted-foreground block mb-1">Opcjonalny komentarz do pliku:</label>
-    <textarea
-      rows="3"
-      class="w-full border border-border rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-      placeholder="Dodaj opis, kontekst lub uwagi..."
-      formControlName="content"></textarea>
-  </div>
-
-</div>
-
-<div mat-dialog-actions align="end" class="border-t pt-3 gap-2">
-  <button appButton variant="destructive" [disabled]="isLoading" (click)="onCancel()">Anuluj</button>
-  <button
-    appButton
-    variant="default"
-    (click)="onUpload()"
-    [disabled]="fileForm.invalid || isLoading">
-    Prześlij plik
-  </button>
 </div>

@@ -5,6 +5,8 @@ import {ActivityService} from '../../../../core/services/api/activity.service';
 import {CommonModule} from '@angular/common';
 import {ButtonDirective} from '../../../../shared/ui/button/button-directive';
 import {FileRequest} from '../../../../core/interfaces/activity/file-request.interface';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 
 interface DialogData {
   projectId: string;
@@ -23,7 +25,9 @@ export interface FileForm {
     FormsModule,
     MatDialogModule,
     ButtonDirective,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './file-upload-dialog.component.html',
   styleUrl: './file-upload-dialog.component.css',
