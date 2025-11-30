@@ -4,10 +4,10 @@
 
 <div [formGroup]="fileForm">
   <mat-dialog-content class="space-y-4 py-4">
-    <div class="border border-dashed border-border p-4 rounded-lg bg-muted/20">
+    <div class="border border-dashed border-border p-4 rounded-lg bg-background/20">
       <label for="fileInput" class="cursor-pointer block text-center">
-        <div class="text-3xl mb-2"><i class="ri-file-add-line mr-2"></i></div>
-        <div class="font-medium text-foreground">
+        <div class="text-3xl mb-2 text-primary/80"><i class="ri-file-add-line mr-2"></i></div>
+        <div class="font-medium text-primary/80">
           {{ file ? file.name : 'Kliknij lub przeciągnij, aby wybrać plik' }}
         </div>
       </label>

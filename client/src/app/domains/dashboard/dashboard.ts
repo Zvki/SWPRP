@@ -4,12 +4,15 @@ import {ButtonDirective} from '../../shared/ui/button/button-directive';
 import {ProjectService} from '../../core/services/api/project.service';
 import {MatDialog} from '@angular/material/dialog';
 import {CreateProjectDialog} from './components/create-project-dialog/create-project-dialog';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     ProjectCard,
-    ButtonDirective
+    ButtonDirective,
+    MatTab,
+    MatTabGroup
   ],
   templateUrl: './dashboard.html',
   standalone: true,

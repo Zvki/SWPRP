@@ -1,23 +1,40 @@
 <section>
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+  <div class="container mx-auto p-4 sm:p-6 lg:p-8">
 
-      <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 class="text-3xl font-bold text-foreground">Panel projektów</h1>
-          <p class="text-foreground mt-1">Przegląd zarządzanych prac dyplomowych i projektów.</p>
-        </div>
-        <button appButton variant="default" (click)="toggleCreationDialog()">
-
-          <div class="mr-2"><i class="ri-add-large-line"></i></div>
-          Dodaj nowy projekt
-        </button>
+    <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-foreground">Panel projektów</h1>
+        <p class="text-foreground mt-1">Przegląd zarządzanych prac dyplomowych i projektów.</p>
       </div>
+      <button appButton variant="default" (click)="toggleCreationDialog()">
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        @for (project of projectsStore(); track project.id) {
-          <app-project-card [project]="project"></app-project-card>
-        }
-      </div>
+        <div class="mr-2"><i class="ri-add-large-line"></i></div>
+        Dodaj nowy projekt
+      </button>
     </div>
+
+      <mat-tab-group>
+        <mat-tab label="Aktywne">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          @for (project of projectsStore()?.ACTIVE; track project.id) {
+            <app-project-card [project]="project"></app-project-card>
+          }
+          </div>
+        </mat-tab>
+        <mat-tab label="Oczekujące">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          @for (project of projectsStore()?.PENDING; track project.id) {
+            <app-project-card [project]="project"></app-project-card>
+          }
+          </div>
+        </mat-tab>
+        <mat-tab label="Zakończone">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          @for (project of projectsStore()?.FINISHED; track project.id) {
+            <app-project-card [project]="project"></app-project-card>
+          }
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+  </div>
 </section>

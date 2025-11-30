@@ -24,6 +24,7 @@ export interface CommentActivityReference {
 }
 
 export interface FileActivityReference {
+  originalName: string,
   name: string,
   content: string,
   url: string

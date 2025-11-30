@@ -31,8 +31,8 @@ export class AuthService {
   }
 
   public logout(): void {
-    this._user.set(null);
     this.keycloak.logout();
+    this._user.set(null);
   }
 
 }

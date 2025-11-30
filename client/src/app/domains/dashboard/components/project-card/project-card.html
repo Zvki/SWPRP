@@ -17,7 +17,7 @@
       <div class="mr-2"><i class="ri-group-line"></i></div>
       <span>Autor: <span class="font-medium text-foreground/80">
         @for(member of project.members; track member.id) {
-          @if(member.student){
+          @if(member.status === MembershipStatus.ACCEPTED){
             {{ member.student.firstName }} {{ member.student.lastName }}
           }
         }

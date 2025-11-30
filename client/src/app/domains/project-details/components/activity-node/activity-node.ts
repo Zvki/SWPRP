@@ -6,6 +6,7 @@ import {ActivityNodeInterface} from '../../../../core/interfaces/activity/activi
 import {ActivityService} from '../../../../core/services/api/activity.service';
 import {DatePipe} from '@angular/common';
 import {ActivityType} from '../../../../core/interfaces/activity/activity.interface';
+import {ResourceService} from '../../../../core/services/api/resource.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ import {ActivityType} from '../../../../core/interfaces/activity/activity.interf
 })
 export class ActivityNode {
   private readonly activityService = inject(ActivityService);
+  private readonly resourceService = inject(ResourceService);
 
   @Input({ required: true })
   public node!: ActivityNodeInterface;
@@ -29,7 +31,7 @@ export class ActivityNode {
 
   protected content: string = '';
 
-  onSendReply() {
+  protected onSendReply() {
     if (!this.content || this.content.trim().length === 0) return;
 
     const data: CommentRequest = {
@@ -41,6 +43,19 @@ export class ActivityNode {
     this.activityService.addComment(data).subscribe({
       next: () => this.content = ''
     });
+  }
+
+  protected onViewClick(fileUrl: string): void {
+    this.resourceService.getFile(fileUrl)
+      .subscribe({
+        next: (blobData: Blob) => {
+          const url = window.URL.createObjectURL(blobData);
+          window.open(url, '_blank');
+        },
+        error: (err) => {
+          console.error('Błąd podglądu pliku:', err);
+        }
+      });
   }
 
   protected readonly ActivityType = ActivityType;

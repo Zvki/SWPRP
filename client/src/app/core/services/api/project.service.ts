@@ -1,21 +1,24 @@
 import {inject, Injectable, Signal, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ProjectResponse} from '../../interfaces/project/project-response';
+import {GroupedProjects, ProjectResponse} from '../../interfaces/project/project-response';
 import {catchError, map, Observable, of, tap} from 'rxjs';
 import {ProjectRequest} from '../../interfaces/project/project-request.interface';
 import {MembershipRequest} from '../../interfaces/project/membership-request.interface';
+import {SnackbarService} from '../../../shared/utils/snackbar.service';
+import {StatusRequest} from '../../interfaces/project/status-request.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
 
-  private http = inject(HttpClient)
-  private API_URL = 'http://localhost:4200/swprp/project'
+  private readonly http = inject(HttpClient)
+  private readonly API_URL = 'http://localhost:4200/swprp/project'
+  private readonly snackbar = inject(SnackbarService);
 
-  private readonly _projectsStore = signal<ProjectResponse[] | null>(null);
+  private readonly _projectsStore = signal<GroupedProjects | null>(null);
 
-  public get projectsStore(): Signal<ProjectResponse[] | null>{
+  public get projectsStore(): Signal<GroupedProjects | null>{
     return this._projectsStore;
   }
 
@@ -24,7 +27,16 @@ export class ProjectService {
       {withCredentials: true})
       .pipe(
         map(projects => {
-          this._projectsStore.set(projects);
+          const grouped = projects.reduce((acc, project) => {
+            acc[project.status].push(project);
+            return acc;
+          }, {
+            ACTIVE: [],
+            PENDING: [],
+            FINISHED: []
+          } as GroupedProjects);
+
+          this._projectsStore.set(grouped);
         }),
         catchError(() => of(false))
       ).subscribe()
@@ -41,19 +53,37 @@ export class ProjectService {
   public createProject(project: ProjectRequest): Observable<Object> {
     return this.http.post(`${this.API_URL}`, project, {withCredentials: true})
       .pipe(tap({
-        next: () => this.getProjects(),
-        error: err => console.error('Error creating project', err)
+        next: () => {
+          this.getProjects()
+          this.snackbar.success("Utworzono projekt!")
+        },
+        error: err => {
+          this.snackbar.error("Nie udało się utworzyć projektu!")
+          console.error('Error creating project', err)
+        }
       }));
   }
 
-  public changeStatus(id: string): void {
-    this.http.patch(`${this.API_URL}/${id}`, {}, {withCredentials: true}).subscribe({
-      next: () => this.getProjects(),
-      error: err => console.error('Error changing status', err)
+  public changeStatus(data: StatusRequest): void {
+    this.http.patch(`${this.API_URL}/status`, data, {withCredentials: true}).subscribe({
+      next: () => {
+        this.snackbar.success("Status zmieniony!")
+        this.getProjects()
+      },
+      error: err => {
+        this.snackbar.error("Nie udało sie zmienić statusu!")
+        console.error('Error changing status', err)
+      }
     });
   }
 
   public addMember(data: MembershipRequest): void {
-    this.http.post(`${this.API_URL}/add-member`, data, {withCredentials: true}).subscribe();
+    this.http.post(`${this.API_URL}/add-member`, data, {withCredentials: true}).subscribe({
+      next: () => this.snackbar.info(`Wysłano zaproszenie do ${data.email}`),
+      error: err => {
+        this.snackbar.error(`Nie udało sie wysłać zaproszenia do ${data.email}`)
+        console.error('Error adding member', err)
+      }
+    });
   }
 }
