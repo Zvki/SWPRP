@@ -11,12 +11,11 @@ import {AuthService} from './core/services/api/auth.service';
   standalone: true,
   styleUrl: './app.css'
 })
-export class App implements OnInit{
+export class App implements OnInit {
 
-  private readonly auth = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
-  ngOnInit(): void {
-    this.auth.initUser();
+  public ngOnInit(): void {
+    this.authService.initUser();
   }
-
 }

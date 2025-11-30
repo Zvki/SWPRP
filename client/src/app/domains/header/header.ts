@@ -2,9 +2,9 @@ import {Component, inject} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {Theme} from '../../core/services/theme';
 import {ButtonDirective} from '../../shared/ui/button/button-directive';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {SigninDialog} from './signin-dialog/signin-dialog';
+import {MatDialogModule} from '@angular/material/dialog';
 import {AuthService} from '../../core/services/api/auth.service';
+import {KeycloakService} from '../../core/services/auth/keycloak.service';
 
 @Component({
   selector: 'app-header',
@@ -18,21 +18,12 @@ import {AuthService} from '../../core/services/api/auth.service';
   styleUrl: './header.css'
 })
 export class Header {
-  private readonly dialog = inject(MatDialog);
   protected readonly authService = inject(AuthService);
   protected readonly themeService = inject(Theme)
 
   user = this.authService.user;
 
-  onLogout() {
-    console.log('Wylogowano');
+  protected onLogout() {
     this.authService.logout();
   }
-
-  protected toggleLoginDialog(): void {
-    this.dialog.open(SigninDialog,{
-      panelClass: "bg-background"
-    })
-  }
-
 }

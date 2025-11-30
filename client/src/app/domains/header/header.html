@@ -28,14 +28,6 @@
             <button appButton (click)="onLogout()" variant="destructive">
               Wyloguj
             </button>
-          } @else {
-            <button appButton (click)="toggleLoginDialog()" variant="default">
-              Zaloguj sie
-            </button>
-
-            <button appButton (click)="onLogout()" variant="default">
-              Rejestracja
-            </button>
           }
           <button appButton size="icon" variant="ghost" (click)="themeService.setDarkMode()"><i class="ri-moon-line"></i></button>
         </div>
