@@ -1,11 +1,8 @@
-import { Component } from '@angular/core';
-import {ButtonDirective} from '../../shared/ui/button/button-directive';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-main',
-  imports: [
-    ButtonDirective
-  ],
+  imports: [],
   templateUrl: './main.html',
   styleUrl: './main.css'
 })
