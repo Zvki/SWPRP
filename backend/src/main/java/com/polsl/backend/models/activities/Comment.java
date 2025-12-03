@@ -13,8 +13,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment extends ActivityReference {
-    private String content;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_reference_id")
     private ActivityReference parentReference;

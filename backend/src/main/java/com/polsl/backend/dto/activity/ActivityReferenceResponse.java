@@ -15,6 +15,7 @@ import java.util.UUID;
 public record ActivityReferenceResponse(
         UUID id,
         UserResponse author,
+        String content,
         ActivityType type,
         Map<String, Object> data
 ) {
@@ -25,7 +26,6 @@ public record ActivityReferenceResponse(
         if (reference instanceof Comment c) {
 
             Map<String, Object> data = new HashMap<>();
-            data.put("content", c.getContent());
             data.put("parentReferenceId",
                     c.getParentReference() != null
                             ? c.getParentReference().getId()
@@ -35,6 +35,7 @@ public record ActivityReferenceResponse(
             return new ActivityReferenceResponse(
                     c.getId(),
                     UserResponse.fromUser(c.getAuthor()),
+                    c.getContent(),
                     ActivityType.COMMENT,
                     data
             );
@@ -44,11 +45,11 @@ public record ActivityReferenceResponse(
             return new ActivityReferenceResponse(
                     f.getId(),
                     UserResponse.fromUser(f.getAuthor()),
+                    f.getContent(),
                     ActivityType.FILE,
                     Map.of(
                             "originalName", f.getOriginalName(),
                             "name", f.getName(),
-                            "content", f.getContent(),
                             "url", f.getUrl()
                     )
             );
@@ -58,10 +59,10 @@ public record ActivityReferenceResponse(
             return new ActivityReferenceResponse(
                     m.getId(),
                     UserResponse.fromUser(m.getAuthor()),
+                    m.getContent(),
                     ActivityType.MEETING,
                     Map.of(
                             "title", m.getTitle(),
-                            "content", m.getContent(),
                             "url", m.getUrl(),
                             "date", m.getStartTime()
                     )

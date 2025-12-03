@@ -3,10 +3,14 @@ package com.polsl.backend.models.activities;
 import com.polsl.backend.enums.ActivityType;
 import com.polsl.backend.models.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @SuperBuilder
@@ -26,7 +30,15 @@ public abstract class ActivityReference {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
+    private String content;
+
     @Enumerated(EnumType.STRING)
     private ActivityType type;
 
+    @OneToMany(
+            mappedBy = "parentReference",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<Comment> comments = new ArrayList<>();
 }

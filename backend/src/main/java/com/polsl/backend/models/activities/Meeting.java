@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Meeting extends ActivityReference {
     private String title;
-    private String content;
     private String url;
     private LocalDateTime startTime;
 }

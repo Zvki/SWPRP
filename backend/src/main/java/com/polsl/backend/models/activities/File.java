@@ -19,7 +19,6 @@ import lombok.experimental.SuperBuilder;
 public class File extends ActivityReference {
     private String name;
     private String originalName;
-    private String content;
     private String url;
     private FileStatus status;
 }
