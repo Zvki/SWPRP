@@ -5,7 +5,8 @@ import {
   ActivityResponse,
   ActivityType,
   CommentActivityReference,
-  FileActivityReference, MeetingActivityReference
+  FileActivityReference,
+  MeetingActivityReference
 } from '../../interfaces/activity/activity.interface';
 import {ActivityNodeInterface} from '../../interfaces/activity/activity-node.interface';
 import {CommentRequest} from '../../interfaces/activity/comment-request.interface';
@@ -118,20 +119,19 @@ export class ActivityService {
       if (a.reference.type === ActivityType.COMMENT) {
         const data = a.reference.data as CommentActivityReference;
         base.parentReferenceId = data.parentReferenceId;
-        base.content = data.content;
+        base.content = a.reference.content;
       }
 
       if (a.reference.type === ActivityType.FILE) {
         const data = a.reference.data as FileActivityReference;
-        base.content = data.content;
+        base.content = a.reference.content;
         base.file = data;
         base.parentReferenceId = undefined;
       }
 
       if (a.reference.type === ActivityType.MEETING) {
-        const data = a.reference.data as MeetingActivityReference;
-        base.meeting = data;
-        base.content = data.content;
+        base.meeting = a.reference.data as MeetingActivityReference;
+        base.content = a.reference.content;
         base.parentReferenceId = undefined;
       }
 

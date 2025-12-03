@@ -13,26 +13,24 @@ export interface ActivityResponse {
 
 export interface ActivityReference {
   id: string,
+  content?: string,
   author: UserResponse,
   type: ActivityType,
   data: CommentActivityReference | FileActivityReference | MeetingActivityReference
 }
 
 export interface CommentActivityReference {
-  content: string,
   parentReferenceId?: string
 }
 
 export interface FileActivityReference {
   originalName: string,
   name: string,
-  content: string,
   url: string
 }
 
 export interface MeetingActivityReference {
   title: string,
-  content: string,
   url: string
   date: Date
 }
