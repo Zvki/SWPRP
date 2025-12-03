@@ -11,9 +11,11 @@ import com.polsl.backend.models.ProjectMembership;
 import com.polsl.backend.models.User;
 import com.polsl.backend.repository.ProjectRepository;
 import com.polsl.backend.repository.UserRepository;
+import com.polsl.backend.utils.events.membership.NewMembershipEvent;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,13 +32,16 @@ public class ProjectService {
 
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ProjectResponse getProjectById(UUID id){
-        return ProjectResponse.fromProject(projectRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Project with id " + id + " wasn't found")));
+    public ProjectResponse getProjectById(UUID id) {
+        var project = projectRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Project with id " + id + " wasn't found"));
+
+        return ProjectResponse.fromProject(project);
     }
 
-    public List<ProjectResponse> getUserProjects(User user){
+    public List<ProjectResponse> getUserProjects(User user) {
 
         List<Project> projects = List.of();
 
@@ -49,20 +54,20 @@ public class ProjectService {
         return projects.stream().map(ProjectResponse::fromProject).toList();
     }
 
-    public ProjectResponse create(User user, ProjectRequest projectData){
+    public ProjectResponse create(User user, ProjectRequest projectData) {
 
         var project = Project.builder()
                 .title(projectData.title())
                 .description(projectData.description())
                 .build();
 
-        if(user.getRole() == SUPERVISOR){
+        if (user.getRole() == SUPERVISOR) {
             project.setSupervisor(user);
             project.setStatus(ACTIVE);
         } else {
 
             var supervisor = userRepository.findById(projectData.supervisorId())
-                    .orElseThrow(()-> new EntityNotFoundException("Supervisor with id " + projectData.supervisorId() + " wasn't found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Supervisor with id " + projectData.supervisorId() + " wasn't found"));
 
             var membership = ProjectMembership.builder()
                     .project(project)
@@ -81,33 +86,44 @@ public class ProjectService {
         return ProjectResponse.fromProject(result);
     }
 
-    public void changeStatus(StatusRequest data){
+    public void changeStatus(StatusRequest data) {
         var project = projectRepository.findById(data.id())
-                .orElseThrow(()-> new EntityNotFoundException("Project with id " + data.id() + " wasn't found"));
+                .orElseThrow(() -> new EntityNotFoundException("Project with id " + data.id() + " wasn't found"));
         project.setStatus(data.status());
         projectRepository.save(project);
     }
 
     @Transactional
     public MembershipResponse createMembership(MembershipRequest data) {
-            var project = projectRepository.findById(data.projectId())
-                    .orElseThrow(() -> new EntityNotFoundException("Project with id " + data.projectId() + " wasn't found"));
+        var project = projectRepository.findById(data.projectId())
+                .orElseThrow(() -> new EntityNotFoundException("Project with id " + data.projectId() + " wasn't found"));
 
-            var member = userRepository.findByEmail(data.email())
-                    .orElseThrow(() -> new EntityNotFoundException("User with email " + data.email() + " wasn't found"));
+        if (project.getMembers()
+                .stream()
+                .anyMatch(m -> m.getStudent().getEmail().equalsIgnoreCase(data.email()))) {
+            throw new IllegalArgumentException("User with email " + data.email() + " is a member");
+        }
 
-            var membership = ProjectMembership.builder()
-                    .studentEmail(member.getEmail())
-                    .status(MembershipStatus.PENDING)
-                    .student(member)
-                    .project(project)
-                    .invitationToken(UUID.randomUUID())
-                    .build();
+        if (project.getSupervisor().getEmail().equalsIgnoreCase(data.email()))
+            throw new IllegalArgumentException("User with email " + data.email() + " is supervisor");
 
-            project.getMembers().add(membership);
-            projectRepository.save(project);
+        var member = userRepository.findByEmail(data.email())
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + data.email() + " wasn't found"));
 
-            return MembershipResponse.fromMembership(membership);
+        var membership = ProjectMembership.builder()
+                .studentEmail(member.getEmail())
+                .status(MembershipStatus.PENDING)
+                .student(member)
+                .project(project)
+                .invitationToken(UUID.randomUUID())
+                .build();
+
+        project.getMembers().add(membership);
+        projectRepository.save(project);
+
+        eventPublisher.publishEvent(new NewMembershipEvent(this, membership));
+
+        return MembershipResponse.fromMembership(membership);
     }
 
 }

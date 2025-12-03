@@ -10,6 +10,7 @@ import com.polsl.backend.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @PreAuthorize("@projectSecurity.isMember(#id, authentication)")
     @GetMapping("/{id}")
     public ResponseEntity<ProjectResponse> getProjectById(@PathVariable UUID id) {
         final var result = projectService.getProjectById(id);
@@ -49,12 +51,14 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @PreAuthorize("@projectSecurity.isMember(#data.id(), authentication)")
     @PatchMapping("/status")
     public ResponseEntity<Void> changeProjectStatus(@RequestBody StatusRequest data) {
         projectService.changeStatus(data);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    @PreAuthorize("@projectSecurity.isMember(#data.projectId(), authentication)")
     @PostMapping("/add-member")
     public ResponseEntity<MembershipResponse> addMember(@RequestBody MembershipRequest data) {
         final var result = projectService.createMembership(data);
