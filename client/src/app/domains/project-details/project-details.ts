@@ -57,7 +57,14 @@ export class ProjectDetails implements OnInit {
       id: id,
       status: ProjectStatus.FINISHED
     }
-    this.projectService.changeStatus(data);
+    this.projectService.changeStatus(data).subscribe({
+      next: () => {
+        this.projectService.getProject(this.projectId)
+          .subscribe(project => {
+            this.project = project;
+          });
+      }
+    });
   }
 
   protected changeStatus(id: string): void {
@@ -65,7 +72,14 @@ export class ProjectDetails implements OnInit {
       id: id,
       status: ProjectStatus.ACTIVE
     }
-    this.projectService.changeStatus(data);
+    this.projectService.changeStatus(data).subscribe({
+      next: () => {
+        this.projectService.getProject(this.projectId)
+          .subscribe(project => {
+            this.project = project;
+          });
+      }
+    });
   }
 
   protected toggleAddMemberDialog(): void {

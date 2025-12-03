@@ -64,8 +64,8 @@ export class ProjectService {
       }));
   }
 
-  public changeStatus(data: StatusRequest): void {
-    this.http.patch(`${this.API_URL}/status`, data, {withCredentials: true}).subscribe({
+  public changeStatus(data: StatusRequest): Observable<Object> {
+    return this.http.patch(`${this.API_URL}/status`, data, {withCredentials: true}).pipe(tap({
       next: () => {
         this.snackbar.success("Status zmieniony!")
         this.getProjects()
@@ -74,7 +74,7 @@ export class ProjectService {
         this.snackbar.error("Nie udało sie zmienić statusu!")
         console.error('Error changing status', err)
       }
-    });
+    }));
   }
 
   public addMember(data: MembershipRequest): void {
