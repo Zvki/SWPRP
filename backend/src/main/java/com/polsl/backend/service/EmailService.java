@@ -19,7 +19,8 @@ public class EmailService {
             final var message = mailSender.createMimeMessage();
             final var helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setFrom(mailFrom);
-            helper.setTo(details.to());
+            String[] recipientsArray = details.recipients().toArray(String[]::new);
+            helper.setTo(recipientsArray);
             helper.setSubject(details.subject());
             helper.setText(details.content(), details.isHtml());
 

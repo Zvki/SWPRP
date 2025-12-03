@@ -30,7 +30,9 @@ public class AuthService {
 
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
         List<String> roles = realmAccess != null ? (List<String>) realmAccess.get("roles") : List.of();
-        UserRole role = !roles.contains("STUDENT") ? UserRole.SUPERVISOR : UserRole.STUDENT;
+        UserRole role = roles.contains("SUPERVISOR")
+                ? UserRole.SUPERVISOR
+                : UserRole.STUDENT;
 
         User newUser = User.builder()
                 .id(id)

@@ -10,6 +10,6 @@ import java.util.UUID;
 public interface ProjectRepository extends JpaRepository<Project, UUID> {
     List<Project> findAllBySupervisorId(String id);
 
-    @Query("SELECT p FROM Project p JOIN p.members m WHERE m.student.id = :studentId")
+    @Query("SELECT p FROM Project p JOIN p.members m WHERE m.student.id = :studentId AND m.status = 'ACCEPTED'")
     List<Project> findProjectsByStudentId(String studentId);
 }

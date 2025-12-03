@@ -1,5 +1,6 @@
 package com.polsl.backend.models.activities;
 
+import com.polsl.backend.enums.FileStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
@@ -20,4 +21,5 @@ public class File extends ActivityReference {
     private String originalName;
     private String content;
     private String url;
+    private FileStatus status;
 }
