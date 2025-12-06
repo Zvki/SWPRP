@@ -6,6 +6,7 @@ import {ProjectRequest} from '../../interfaces/project/project-request.interface
 import {MembershipRequest} from '../../interfaces/project/membership-request.interface';
 import {SnackbarService} from '../../../shared/utils/snackbar.service';
 import {StatusRequest} from '../../interfaces/project/status-request.interface';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,17 @@ export class ProjectService {
   private readonly http = inject(HttpClient)
   private readonly API_URL = 'http://localhost:4200/swprp/project'
   private readonly snackbar = inject(SnackbarService);
+  private readonly router = inject(Router)
 
   private readonly _projectsStore = signal<GroupedProjects | null>(null);
+  private readonly _project = signal<ProjectResponse | null>(null);
 
   public get projectsStore(): Signal<GroupedProjects | null>{
     return this._projectsStore;
+  }
+
+  public get project(): Signal<ProjectResponse | null>{
+    return this._project;
   }
 
   public getProjects(): void {
@@ -43,11 +50,17 @@ export class ProjectService {
       ;
   }
 
-  public getProject(id: string): Observable<ProjectResponse> {
-    return this.http.get<ProjectResponse>(
+  public getProject(id: string): void {
+    this.http.get<ProjectResponse>(
       `${this.API_URL}/${id}`,
       { withCredentials: true }
-    );
+    ).subscribe({
+      next: response => this._project.set(response),
+      error: err => {
+        this.snackbar.error("Nie udało sie pobrać projektu")
+        this.router.navigate(['/dashboard']);
+      }
+    });
   }
 
   public createProject(project: ProjectRequest): Observable<Object> {

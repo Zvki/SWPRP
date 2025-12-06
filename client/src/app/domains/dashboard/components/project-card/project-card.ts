@@ -40,7 +40,9 @@ export class ProjectCard {
       id: id,
       status: ProjectStatus.ACTIVE
     }
-    this.projectService.changeStatus(data).subscribe();
+    this.projectService.changeStatus(data).subscribe({
+      next: () => this.projectService.getProjects()
+    });
   }
 
   protected readonly StatusStyling = ProjectStatusStyling;

@@ -40,15 +40,11 @@ export class ProjectDetails implements OnInit {
   protected meetingsTree = this.activityService.meetingTree;
   protected user = inject(AuthService).user;
   protected projectId!: string;
-  protected project!: ProjectResponse;
+  protected project = this.projectService.project;
 
   public ngOnInit(): void {
     this.projectId = this.route.snapshot.params['id'];
     this.projectService.getProject(this.projectId)
-      .subscribe(project => {
-        this.project = project;
-      });
-
     this.activityService.refreshActivities(this.projectId)
   }
 
@@ -58,12 +54,7 @@ export class ProjectDetails implements OnInit {
       status: ProjectStatus.FINISHED
     }
     this.projectService.changeStatus(data).subscribe({
-      next: () => {
-        this.projectService.getProject(this.projectId)
-          .subscribe(project => {
-            this.project = project;
-          });
-      }
+      next: () => this.projectService.getProject(this.projectId)
     });
   }
 
@@ -73,12 +64,7 @@ export class ProjectDetails implements OnInit {
       status: ProjectStatus.ACTIVE
     }
     this.projectService.changeStatus(data).subscribe({
-      next: () => {
-        this.projectService.getProject(this.projectId)
-          .subscribe(project => {
-            this.project = project;
-          });
-      }
+      next: () => this.projectService.getProject(this.projectId)
     });
   }
 
