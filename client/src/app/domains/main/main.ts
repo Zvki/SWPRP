@@ -14,9 +14,11 @@ export class Main implements OnInit{
 
   private readonly acitvityService = inject(ActivityService);
   protected readonly pendingFiles = this.acitvityService.pendingFiles;
+  protected readonly nextMeetings = this.acitvityService.nextMeetings;
 
   public ngOnInit(): void {
     this.acitvityService.loadPendingFiles()
+    this.acitvityService.loadNextMeetings()
   }
 
 

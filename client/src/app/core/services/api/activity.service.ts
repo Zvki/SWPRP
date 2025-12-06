@@ -23,6 +23,7 @@ export class ActivityService {
   filesTree = signal<ActivityNodeInterface[]>([]);
   meetingTree = signal<ActivityNodeInterface[]>([]);
   pendingFiles = signal<ActivityNodeInterface[]>([]);
+  nextMeetings = signal<ActivityNodeInterface[]>([]);
 
   private readonly http = inject(HttpClient);
 
@@ -66,6 +67,17 @@ export class ActivityService {
         error: err => {
           console.error('Error loading pending files', err);
           this.pendingFiles.set([]);
+        }
+      })
+  }
+
+  public loadNextMeetings(): void {
+    this.http.get<ActivityList>(`${this.API_URL}/next-meetings`)
+      .subscribe({
+        next: res => this.nextMeetings.set(this.buildTree(res.activities)),
+        error: err => {
+          console.error('Error loading meetings', err);
+          this.nextMeetings.set([]);
         }
       })
   }
