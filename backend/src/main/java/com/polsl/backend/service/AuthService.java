@@ -20,7 +20,7 @@ public class AuthService {
     public User getUser(Jwt jwt) {
         String id = jwt.getSubject();
 
-        return userRepository.findById(id).orElseGet(() -> createUser(jwt));
+        return userRepository.findById(UUID.fromString(id)).orElseGet(() -> createUser(jwt));
     }
 
     public User createUser(Jwt jwt) {

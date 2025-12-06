@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProjectRepository extends JpaRepository<Project, UUID> {
-    List<Project> findAllBySupervisorId(String id);
+    List<Project> findAllBySupervisorId(UUID id);
 
     @Query("SELECT p FROM Project p JOIN p.members m WHERE m.student.id = :studentId AND m.status = 'ACCEPTED'")
-    List<Project> findProjectsByStudentId(String studentId);
+    List<Project> findProjectsByStudentId(UUID studentId);
 }
