@@ -50,7 +50,8 @@ public record ActivityReferenceResponse(
                     Map.of(
                             "originalName", f.getOriginalName(),
                             "name", f.getName(),
-                            "url", f.getUrl()
+                            "url", f.getUrl(),
+                            "status", f.getStatus()
                     )
             );
         }
