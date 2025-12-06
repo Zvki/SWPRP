@@ -6,6 +6,7 @@ import com.polsl.backend.enums.FileStatus;
 import com.polsl.backend.models.activities.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,5 +24,15 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
 
     List<Activity> findAllByProject_IdAndReference_Type(UUID projectId, ActivityType type);
 
-    List<Activity> findAllByProject_Supervisor_IdAndReference_TypeAndReference_Status(UUID projectSupervisorId, ActivityType type, FileStatus status);
+    @Query("""
+            SELECT a FROM Activity a
+            JOIN File f ON a.reference = f
+            WHERE a.project.supervisor.id = :projectSupervisorId
+            AND f.type = :type
+            AND f.status = :status
+            """)
+    List<Activity> findActivitiesByProjectSupervisorIdAndReferenceTypeAndFileStatus(
+            @Param("projectSupervisorId") UUID projectSupervisorId,
+            @Param("type") ActivityType type,
+            @Param("status") FileStatus status);
 }

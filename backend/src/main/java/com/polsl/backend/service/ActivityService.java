@@ -141,7 +141,7 @@ public class ActivityService {
 
     public ActivityListResponse getAllPendingFiles(UUID userId) {
         var files = activityRepository.
-                findAllByProject_Supervisor_IdAndReference_TypeAndReference_Status(userId, ActivityType.FILE, FileStatus.PENDING);
+                findActivitiesByProjectSupervisorIdAndReferenceTypeAndFileStatus(userId, ActivityType.FILE, FileStatus.PENDING);
         var result = files.stream().map(ActivityResponse::fromActivity).toList();
         return new ActivityListResponse(result);
     }
