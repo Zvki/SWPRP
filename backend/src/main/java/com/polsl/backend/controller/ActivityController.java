@@ -79,4 +79,11 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/next-meetings")
+    public ResponseEntity<ActivityListResponse> getNextMeetings(@AuthenticationPrincipal Jwt jwt) {
+        final var user = authService.getUser(jwt);
+        final var result = activityService.getNextMeetings(user.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }

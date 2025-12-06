@@ -18,8 +18,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -143,6 +145,12 @@ public class ActivityService {
         var files = activityRepository.
                 findActivitiesByProjectSupervisorIdAndReferenceTypeAndFileStatus(userId, ActivityType.FILE, FileStatus.PENDING);
         var result = files.stream().map(ActivityResponse::fromActivity).toList();
+        return new ActivityListResponse(result);
+    }
+
+    public ActivityListResponse getNextMeetings(UUID userId) {
+        var meetings = activityRepository.findNextMeetings(userId, LocalDateTime.now(), PageRequest.of(0, 5));
+        var result = meetings.stream().map(ActivityResponse::fromActivity).toList();
         return new ActivityListResponse(result);
     }
 
