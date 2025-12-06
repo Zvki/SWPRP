@@ -1,4 +1,4 @@
-package com.polsl.backend.dto.activity;
+package com.polsl.backend.dto.activity.file;
 
 import org.springframework.web.multipart.MultipartFile;
 

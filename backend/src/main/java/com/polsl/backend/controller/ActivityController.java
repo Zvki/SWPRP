@@ -1,6 +1,8 @@
 package com.polsl.backend.controller;
 
 import com.polsl.backend.dto.activity.*;
+import com.polsl.backend.dto.activity.file.FileRequest;
+import com.polsl.backend.dto.activity.file.FileStatusRequest;
 import com.polsl.backend.service.ActivityService;
 import com.polsl.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -84,6 +86,12 @@ public class ActivityController {
         final var user = authService.getUser(jwt);
         final var result = activityService.getNextMeetings(user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PatchMapping("/file-status")
+    public ResponseEntity<Void> updateFileStatus(@RequestBody FileStatusRequest data) {
+        activityService.updateFileStatus(data);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 }

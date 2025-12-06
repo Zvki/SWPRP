@@ -1,14 +1,13 @@
 package com.polsl.backend.service;
 
 import com.polsl.backend.dto.activity.*;
+import com.polsl.backend.dto.activity.file.FileRequest;
+import com.polsl.backend.dto.activity.file.FileStatusRequest;
 import com.polsl.backend.enums.ActivityType;
 import com.polsl.backend.enums.FileStatus;
 import com.polsl.backend.enums.UserRole;
 import com.polsl.backend.models.User;
-import com.polsl.backend.models.activities.Activity;
-import com.polsl.backend.models.activities.Comment;
-import com.polsl.backend.models.activities.File;
-import com.polsl.backend.models.activities.Meeting;
+import com.polsl.backend.models.activities.*;
 import com.polsl.backend.repository.ActivityReferenceRepository;
 import com.polsl.backend.repository.ActivityRepository;
 import com.polsl.backend.repository.ProjectRepository;
@@ -17,6 +16,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -152,6 +152,22 @@ public class ActivityService {
         var meetings = activityRepository.findNextMeetings(userId, LocalDateTime.now(), PageRequest.of(0, 5));
         var result = meetings.stream().map(ActivityResponse::fromActivity).toList();
         return new ActivityListResponse(result);
+    }
+
+    @Transactional
+    public void updateFileStatus(FileStatusRequest data) {
+        var activity = activityRepository.findById(data.activityId())
+                .orElseThrow(() -> new EntityNotFoundException("Activity with id " + data.activityId() + " wasn't found"));
+
+        var reference = activity.getReference();
+
+        reference = Hibernate.unproxy(reference, ActivityReference.class);
+
+        if (!(reference instanceof File file)) {
+            throw new IllegalArgumentException("Activity " + data.activityId() + " is not a file");
+        }
+
+        file.setStatus(data.status());
     }
 
 }
