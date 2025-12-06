@@ -7,6 +7,7 @@ import {ActivityService} from '../../../../core/services/api/activity.service';
 import {DatePipe} from '@angular/common';
 import {ActivityType} from '../../../../core/interfaces/activity/activity.interface';
 import {ResourceService} from '../../../../core/services/api/resource.service';
+import {ActivityCard} from '../../../../shared/activity-card/activity-card';
 
 
 @Component({
@@ -14,7 +15,7 @@ import {ResourceService} from '../../../../core/services/api/resource.service';
   imports: [
     FormsModule,
     ButtonDirective,
-    DatePipe
+    ActivityCard
   ],
   templateUrl: './activity-node.html',
   styleUrl: './activity-node.css',

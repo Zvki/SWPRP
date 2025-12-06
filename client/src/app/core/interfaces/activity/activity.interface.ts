@@ -26,7 +26,8 @@ export interface CommentActivityReference {
 export interface FileActivityReference {
   originalName: string,
   name: string,
-  url: string
+  url: string,
+  status: FileStatus
 }
 
 export interface MeetingActivityReference {
@@ -39,4 +40,10 @@ export enum ActivityType {
   COMMENT = "COMMENT",
   FILE = "FILE",
   MEETING = "MEETING"
+}
+
+export enum FileStatus {
+  PENDING = 'PENDING',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  COMPLETED = 'COMPLETED'
 }

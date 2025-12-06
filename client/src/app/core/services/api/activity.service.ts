@@ -22,6 +22,7 @@ export class ActivityService {
   activityTree = signal<ActivityNodeInterface[]>([]);
   filesTree = signal<ActivityNodeInterface[]>([]);
   meetingTree = signal<ActivityNodeInterface[]>([]);
+  pendingFiles = signal<ActivityNodeInterface[]>([]);
 
   private readonly http = inject(HttpClient);
 
@@ -56,6 +57,17 @@ export class ActivityService {
           this.meetingTree.set([]);
         }
       });
+  }
+
+  public loadPendingFiles(): void {
+    this.http.get<ActivityList>(`${this.API_URL}/pending-files`)
+      .subscribe({
+        next: res => this.pendingFiles.set(this.buildTree(res.activities)),
+        error: err => {
+          console.error('Error loading pending files', err);
+          this.pendingFiles.set([]);
+        }
+      })
   }
 
   public addComment(data: CommentRequest): Observable<Object> {

@@ -1,0 +1,70 @@
+<div class="flex items-start gap-3">
+
+  <div class="flex-1">
+    <div class="text-sm mb-1">
+      <strong class="text-foreground">
+        {{ node.author.firstName }} {{ node.author.lastName }}
+      </strong>
+
+      <span class="text-muted-foreground">
+          • {{ node.createdAt | date:'short' }}
+        </span>
+    </div>
+
+
+    <div class="text-foreground/90 leading-relaxed whitespace-pre-line">
+      {{ node.content }}
+    </div>
+
+
+    @if (node.type === ActivityType.FILE && node.file !== null) {
+      <div class="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/30 mt-2">
+
+        <div class="w-10 h-10 rounded-md bg-muted flex items-center justify-center text-xl">
+          <i class="ri-file-pdf-2-line"></i>
+        </div>
+
+        <div class="flex-1">
+          <div class="text-foreground font-medium">
+            {{ node.file?.originalName }}
+          </div>
+        </div>
+
+
+        <button appButton size="icon" [disabled]="!node.file?.url"
+                (click)="onViewClick(node.file!.url)"><i class="ri-file-download-line"></i></button>
+
+      </div>
+    }
+
+    @if (node.type === ActivityType.MEETING && node.meeting !== null) {
+      <div class="flex items-start gap-3 p-3 border border-primary/50 rounded-lg bg-primary/10 mt-3">
+
+        <div
+          class="w-10 h-10 rounded-md bg-primary/20 text-primary flex items-center justify-center text-xl shrink-0">
+          <i class="ri-calendar-event-line"></i>
+        </div>
+
+        <div class="flex-1 space-y-1">
+          <div class="text-primary font-bold">
+            {{ node.meeting?.title }}
+          </div>
+          <div class="text-sm text-foreground/80">
+            <i class="ri-time-line mr-1"></i>
+            {{ node.meeting?.date | date:'medium' }}
+          </div>
+        </div>
+
+        <a [href]="node.meeting?.url"
+           target="_blank"
+           class="shrink-0"
+        >
+          <button appButton size="sm">
+            <i class="ri-external-link-line mr-1"></i> Przejdź
+          </button>
+        </a>
+
+      </div>
+    }
+  </div>
+</div>

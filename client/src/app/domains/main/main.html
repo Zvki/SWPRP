@@ -2,8 +2,13 @@
   <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
     <h2 class="text-xl font-bold mb-3"><i class="ri-calendar-line"></i> Najbliższe spotkania</h2>
   </div>
-  <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
+  <div class="bg-card border border-border rounded-lg p-5 shadow-sm space-y-4">
     <h2 class="text-xl font-bold mb-3"><i class="ri-file-text-line"></i> Nowe pliki do sprawdzenia</h2>
+    @for (file of pendingFiles(); track file) {
+      <div>
+        <app-activity-card [node]="file"></app-activity-card>
+      </div>
+    }
   </div>
   <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
     <h2 class="text-xl font-bold mb-3"><i class="ri-fire-line"></i> Pilne akcje i zaległości</h2>
