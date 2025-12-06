@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class AuthService {
                 : UserRole.STUDENT;
 
         User newUser = User.builder()
-                .id(id)
+                .id(UUID.fromString(id))
                 .email(email)
                 .firstName(firstName)
                 .lastName(lastName)

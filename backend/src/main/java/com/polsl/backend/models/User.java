@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "\"user\"")
 @Data
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
-    private String id;
+    private UUID id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
