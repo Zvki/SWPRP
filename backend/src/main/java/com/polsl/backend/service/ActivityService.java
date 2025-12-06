@@ -2,6 +2,8 @@ package com.polsl.backend.service;
 
 import com.polsl.backend.dto.activity.*;
 import com.polsl.backend.enums.ActivityType;
+import com.polsl.backend.enums.FileStatus;
+import com.polsl.backend.enums.UserRole;
 import com.polsl.backend.models.User;
 import com.polsl.backend.models.activities.Activity;
 import com.polsl.backend.models.activities.Comment;
@@ -75,6 +77,7 @@ public class ActivityService {
                     .content(data.content())
                     .url(storedFile._1())
                     .name(storedFile._2())
+                    .status(author.getRole().equals(UserRole.SUPERVISOR) ? FileStatus.COMPLETED : FileStatus.PENDING)
                     .build();
 
             var activity = Activity.builder()
@@ -133,6 +136,13 @@ public class ActivityService {
     public ActivityListResponse getAllProjectMeetings(UUID id) {
         var meetings = activityRepository.findAllByProject_IdAndReference_Type(id, ActivityType.MEETING);
         var result = meetings.stream().map(ActivityResponse::fromActivity).toList();
+        return new ActivityListResponse(result);
+    }
+
+    public ActivityListResponse getAllPendingFiles(UUID userId) {
+        var files = activityRepository.
+                findAllByProject_Supervisor_IdAndReference_TypeAndReference_Status(userId, ActivityType.FILE, FileStatus.PENDING);
+        var result = files.stream().map(ActivityResponse::fromActivity).toList();
         return new ActivityListResponse(result);
     }
 

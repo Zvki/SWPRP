@@ -2,6 +2,7 @@ package com.polsl.backend.repository;
 
 import com.polsl.backend.dto.activity.ActivityResponse;
 import com.polsl.backend.enums.ActivityType;
+import com.polsl.backend.enums.FileStatus;
 import com.polsl.backend.models.activities.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,6 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
     List<Activity> findAllByProjectId(UUID projectId);
 
     List<Activity> findAllByProject_IdAndReference_Type(UUID projectId, ActivityType type);
+
+    List<Activity> findAllByProject_Supervisor_IdAndReference_TypeAndReference_Status(UUID projectSupervisorId, ActivityType type, FileStatus status);
 }

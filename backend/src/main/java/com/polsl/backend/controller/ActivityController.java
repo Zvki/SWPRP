@@ -71,4 +71,12 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/pending-files")
+    public ResponseEntity<ActivityListResponse> getAllPendingFiles(@AuthenticationPrincipal Jwt jwt) {
+        final var user = authService.getUser(jwt);
+        final var result = activityService.getAllPendingFiles(user.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }
