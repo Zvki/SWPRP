@@ -57,6 +57,7 @@ export class ProjectService {
     ).subscribe({
       next: response => this._project.set(response),
       error: err => {
+        this._project.set(null);
         this.snackbar.error("Nie udało sie pobrać projektu")
         this.router.navigate(['/dashboard']);
       }

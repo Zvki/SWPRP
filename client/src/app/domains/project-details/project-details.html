@@ -1,26 +1,26 @@
-@if (project) {
+@if (project()) {
   <div class="border-b border-border pb-6 mb-8">
 
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
       <h1 class="text-4xl font-bold tracking-tight flex items-center gap-4 text-foreground">
-        {{ project.title }}
+        {{ project()?.title }}
 
         <span class="text-sm px-3 py-1 rounded-full whitespace-nowrap"
-              [ngClass]="ProjectStatusStyling[project.status]">
-        {{ ProjectStatusLabel[project.status] }}
+              [ngClass]="ProjectStatusStyling[project()!.status]">
+        {{ ProjectStatusLabel[project()!.status] }}
       </span>
       </h1>
 
       @if (user()?.role === UserRole.SUPERVISOR) {
         <div class="flex flex-col sm:flex-row gap-3">
-          @if (project.status === ProjectStatus.PENDING) {
-            <button appButton variant="outline" (click)="changeStatus(project.id)">
+          @if (project()?.status === ProjectStatus.PENDING) {
+            <button appButton variant="outline" (click)="changeStatus(project()!.id)">
               Zaakceptuj
             </button>
           }
 
-          <button appButton variant="destructive" (click)="finishProject(project.id)">
+          <button appButton variant="destructive" (click)="finishProject(project()!.id)">
             Zakończ
           </button>
         </div>
@@ -39,9 +39,9 @@
         <div class="flex items-center gap-3">
           <div>
             <p class="font-medium text-foreground/80">
-              {{ project.supervisor.firstName }} {{ project.supervisor.lastName }}
+              {{ project()!.supervisor.firstName }} {{ project()!.supervisor.lastName }}
             </p>
-            <p class="text-xs text-muted-foreground">{{ project.supervisor.email }}</p>
+            <p class="text-xs text-muted-foreground">{{ project()!.supervisor.email }}</p>
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="space-y-4">
-          @for (m of project.members; track m.id) {
+          @for (m of project()?.members; track m.id) {
             @if (m.status === MembershipStatus.ACCEPTED) {
               <div class="leading-tight">
                 <p class="font-medium text-foreground/80">{{ m.student.firstName }} {{ m.student.lastName }}</p>
@@ -75,7 +75,7 @@
         <h2 class="text-xl font-semibold mb-4 text-foreground">Informacje o projekcie</h2>
 
         <p class="text-muted-foreground leading-relaxed">
-          {{ project.description }}
+          {{ project()?.description }}
         </p>
       </div>
 
