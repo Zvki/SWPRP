@@ -1,5 +1,4 @@
 <header>
-
   <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
 
@@ -9,28 +8,58 @@
         </a>
       </div>
 
-      <div class="hidden md:block">
-        <ul class="nav-links ml-10 flex items-baseline space-x-2">
-          @if (user()) {
-          <li><button appButton routerLink="/dashboard" variant="ghost">Dashboard</button></li>
-          <li><button appButton routerLink="/profile" variant="ghost">Profil</button></li>
-          <li><button appButton routerLink="/settings" variant="ghost">Ustawienia</button></li>
-          }
-        </ul>
-      </div>
+      <div class="flex items-center space-x-4">
 
-        <div class="ml-4 flex items-center md:ml-6 space-x-4">
+        @if (user()) {
+          <ul class="hidden md:flex items-baseline space-x-2">
+            <li>
+              <button appButton routerLink="/dashboard" variant="ghost">Dashboard</button>
+            </li>
+          </ul>
+        }
+
+        <button appButton size="icon" variant="ghost" (click)="themeService.setDarkMode()"><i class="ri-moon-line"></i></button>
+
+        <button appButton size="icon" variant="ghost" class="md:hidden" (click)="toggleMenu()">
+          @if (menuOpen()) {
+            <i class="ri-close-line"></i>
+          } @else {
+            <i class="ri-menu-line"></i>
+          }
+        </button>
+
+        <div class="hidden md:flex items-center space-x-4">
           @if (user()) {
             <span class="text-sm text-muted-foreground">
-              Witaj, <span class="font-medium text-foreground">{{ user()?.firstName }}</span>
-            </span>
-
+            Witaj, <span class="font-medium text-foreground">{{ user()?.firstName }}</span>
+          </span>
             <button appButton (click)="onLogout()" variant="destructive">
               Wyloguj
             </button>
           }
-          <button appButton size="icon" variant="ghost" (click)="themeService.setDarkMode()"><i class="ri-moon-line"></i></button>
         </div>
       </div>
+    </div>
   </nav>
+
+  @if (menuOpen()) {
+    <div class="md:hidden border-t border-border p-3 space-y-2">
+
+      @if (user()) {
+        <div class="px-4 py-2">
+          <span class="text-sm text-muted-foreground">
+            Witaj, <span class="font-medium text-foreground">{{ user()?.firstName }}</span>
+          </span>
+        </div>
+        <button appButton routerLink="/dashboard" variant="outline" class="w-full justify-start" (click)="toggleMenu()">
+          Dashboard
+        </button>
+        <button appButton (click)="onLogout(); toggleMenu()" variant="destructive" class="w-full justify-start">
+          Wyloguj
+        </button>
+      } @else {
+      }
+    </div>
+  }
+
 </header>

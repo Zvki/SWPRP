@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {Theme} from '../../core/services/theme';
 import {ButtonDirective} from '../../shared/ui/button/button-directive';
@@ -21,7 +21,12 @@ export class Header {
   protected readonly authService = inject(AuthService);
   protected readonly themeService = inject(Theme)
 
-  user = this.authService.user;
+  protected user = this.authService.user;
+  protected menuOpen = signal(false);
+
+  protected toggleMenu(): void {
+    this.menuOpen.update(current => !current);
+  }
 
   protected onLogout() {
     this.authService.logout();
