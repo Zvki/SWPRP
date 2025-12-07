@@ -3,6 +3,7 @@ package com.polsl.backend.controller;
 import com.polsl.backend.dto.activity.*;
 import com.polsl.backend.dto.activity.file.FileRequest;
 import com.polsl.backend.dto.activity.file.FileStatusRequest;
+import com.polsl.backend.enums.FileStatus;
 import com.polsl.backend.service.ActivityService;
 import com.polsl.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -73,10 +74,10 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/pending-files")
-    public ResponseEntity<ActivityListResponse> getAllPendingFiles(@AuthenticationPrincipal Jwt jwt) {
+    @GetMapping("/files/{status}")
+    public ResponseEntity<ActivityListResponse> getAllPendingFiles(@AuthenticationPrincipal Jwt jwt, @PathVariable FileStatus status) {
         final var user = authService.getUser(jwt);
-        final var result = activityService.getAllPendingFiles(user.getId());
+        final var result = activityService.getFilesByStatus(user, status);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -84,13 +85,19 @@ public class ActivityController {
     @GetMapping("/next-meetings")
     public ResponseEntity<ActivityListResponse> getNextMeetings(@AuthenticationPrincipal Jwt jwt) {
         final var user = authService.getUser(jwt);
-        final var result = activityService.getNextMeetings(user.getId());
+        final var result = activityService.getNextMeetings(user);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PatchMapping("/file-status")
     public ResponseEntity<Void> updateFileStatus(@RequestBody FileStatusRequest data) {
         activityService.updateFileStatus(data);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @DeleteMapping("/{activityId}")
+    public ResponseEntity<Void> deleteActivity(@PathVariable UUID activityId) {
+        activityService.deleteActivity(activityId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 

@@ -3,5 +3,6 @@ package com.polsl.backend.enums;
 public enum FileStatus {
     PENDING,
     UNDER_REVIEW,
-    COMPLETED
+    COMPLETED,
+    CHANGES_REQUESTED
 }

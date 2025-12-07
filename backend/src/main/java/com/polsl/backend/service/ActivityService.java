@@ -10,6 +10,7 @@ import com.polsl.backend.models.User;
 import com.polsl.backend.models.activities.*;
 import com.polsl.backend.repository.ActivityReferenceRepository;
 import com.polsl.backend.repository.ActivityRepository;
+import com.polsl.backend.repository.ProjectMembershipRepository;
 import com.polsl.backend.repository.ProjectRepository;
 import com.polsl.backend.utils.events.activity.NewActivityEvent;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -35,6 +37,7 @@ public class ActivityService {
     private final ApplicationEventPublisher eventPublisher;
 
     private final FileService fileService;
+    private final ProjectMembershipRepository projectMembershipRepository;
 
     @Transactional
     public ActivityResponse addComment(CommentRequest data, User author) {
@@ -79,7 +82,7 @@ public class ActivityService {
                     .content(data.content())
                     .url(storedFile._1())
                     .name(storedFile._2())
-                    .status(author.getRole().equals(UserRole.SUPERVISOR) ? FileStatus.COMPLETED : FileStatus.PENDING)
+                    .status(author.getRole().equals(UserRole.SUPERVISOR) ? FileStatus.CHANGES_REQUESTED : FileStatus.PENDING)
                     .build();
 
             var activity = Activity.builder()
@@ -123,6 +126,10 @@ public class ActivityService {
         return ActivityResponse.fromActivity(result);
     }
 
+    public void deleteActivity(UUID id) {
+        activityRepository.deleteById(id);
+    }
+
     public ActivityListResponse getAllByProjectId(UUID projectId) {
         var activities = activityRepository.findAllByProjectId(projectId);
         var result = activities.stream().map(ActivityResponse::fromActivity).toList();
@@ -141,15 +148,21 @@ public class ActivityService {
         return new ActivityListResponse(result);
     }
 
-    public ActivityListResponse getAllPendingFiles(UUID userId) {
-        var files = activityRepository.
-                findActivitiesByProjectSupervisorIdAndReferenceTypeAndFileStatus(userId, ActivityType.FILE, FileStatus.PENDING);
+    public ActivityListResponse getFilesByStatus(User user, FileStatus status) {
+        var files = new ArrayList<Activity>();
+        files.addAll(activityRepository.findFileActivitiesBySupervisor(user, ActivityType.FILE, status));
+        files.addAll(activityRepository.findFileActivitiesByMembers(user, ActivityType.FILE, status));
+
         var result = files.stream().map(ActivityResponse::fromActivity).toList();
         return new ActivityListResponse(result);
     }
 
-    public ActivityListResponse getNextMeetings(UUID userId) {
-        var meetings = activityRepository.findNextMeetings(userId, LocalDateTime.now(), PageRequest.of(0, 5));
+    public ActivityListResponse getNextMeetings(User user) {
+        var meetings = new ArrayList<Activity>();
+
+        meetings.addAll(activityRepository.findMeetingActivitiesBySupervisor(user, LocalDateTime.now(), PageRequest.of(0, 5)));
+        meetings.addAll(activityRepository.findMeetingsForMember(user, LocalDateTime.now(), PageRequest.of(0, 5)));
+
         var result = meetings.stream().map(ActivityResponse::fromActivity).toList();
         return new ActivityListResponse(result);
     }
