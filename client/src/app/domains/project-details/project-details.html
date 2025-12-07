@@ -34,7 +34,7 @@
     <aside class="lg:col-span-1 space-y-6">
 
       <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
-        <h2 class="text-lg font-semibold mb-3 text-foreground">Opiekun projektu</h2>
+        <h2 class="text-lg font-semibold mb-3 text-foreground"><i class="ri-user-2-line"></i> Opiekun projektu</h2>
 
         <div class="flex items-center gap-3">
           <div>
@@ -49,7 +49,7 @@
       <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
 
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-semibold text-foreground m-0">Członkowie</h2>
+          <h2 class="text-lg font-semibold text-foreground m-0"><i class="ri-team-line"></i> Członkowie</h2>
 
           <button appButton variant="outline" size="icon" (click)="toggleAddMemberDialog()"><i
             class="ri-add-line"></i></button>
@@ -72,7 +72,7 @@
     <main class="lg:col-span-3">
 
       <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-8">
-        <h2 class="text-xl font-semibold mb-4 text-foreground">Informacje o projekcie</h2>
+        <h2 class="text-xl font-semibold mb-4 text-foreground"><i class="ri-info-card-line"></i> Informacje o projekcie</h2>
 
         <p class="text-muted-foreground leading-relaxed">
           {{ project()?.description }}

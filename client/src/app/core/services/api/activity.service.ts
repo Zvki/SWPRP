@@ -13,12 +13,15 @@ import {CommentRequest} from '../../interfaces/activity/comment-request.interfac
 import {MeetingRequest} from '../../interfaces/activity/meeting-request.interface';
 import {FileRequest} from '../../interfaces/activity/file-request.interface';
 import {Observable, tap} from 'rxjs';
+import {FileStatusRequest} from '../../interfaces/activity/file-status-request.interface';
+import {ProjectService} from './project.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActivityService {
   private API_URL = 'http://localhost:4200/swprp/activity'
+  private readonly project = inject(ProjectService).project;
   activityTree = signal<ActivityNodeInterface[]>([]);
   filesTree = signal<ActivityNodeInterface[]>([]);
   meetingTree = signal<ActivityNodeInterface[]>([]);
@@ -63,7 +66,9 @@ export class ActivityService {
   public loadPendingFiles(): void {
     this.http.get<ActivityList>(`${this.API_URL}/pending-files`)
       .subscribe({
-        next: res => this.pendingFiles.set(this.buildTree(res.activities)),
+        next: res => {
+          this.pendingFiles.set(this.buildTree(res.activities))
+        },
         error: err => {
           console.error('Error loading pending files', err);
           this.pendingFiles.set([]);
@@ -105,6 +110,18 @@ export class ActivityService {
           error: err => console.error('Error adding file', err)
         })
       );
+  }
+
+  public updateFileStatus(data: FileStatusRequest): Observable<Object> {
+    return this.http.patch(`${this.API_URL}/file-status`, data).pipe(
+      tap({
+        next: () => {
+          this.loadPendingFiles();
+          if(this.project()) this.refreshActivities(this.project()!.id)
+        },
+        error: err => console.error('Error updating file status', err)
+      })
+    )
   }
 
   public addMeeting(data: MeetingRequest): Observable<Object> {

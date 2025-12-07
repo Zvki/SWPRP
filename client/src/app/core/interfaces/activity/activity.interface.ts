@@ -47,3 +47,15 @@ export enum FileStatus {
   UNDER_REVIEW = 'UNDER_REVIEW',
   COMPLETED = 'COMPLETED'
 }
+
+export const FileStatusStyling: Record<FileStatus, string> = {
+  [FileStatus.COMPLETED]: 'bg-green-100 text-green-800',
+  [FileStatus.UNDER_REVIEW]: 'bg-yellow-100 text-yellow-800',
+  [FileStatus.PENDING]: 'bg-red-100 text-red-800'
+}
+
+export const FileStatusLabel: Record<FileStatus, string> = {
+  [FileStatus.UNDER_REVIEW]: 'Rozpatrywany',
+  [FileStatus.PENDING]: 'Oczekujący',
+  [FileStatus.COMPLETED]: 'Zakończony',
+}

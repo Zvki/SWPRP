@@ -6,12 +6,26 @@
         <app-activity-card [node]="meeting"></app-activity-card>
       </div>
     }
+    @empty {
+      <div class="p-6 text-center text-primary">
+        <i class="ri-calendar-check-line text-4xl"></i>
+        <p class="font-medium mt-2">Jesteś na bieżąco!</p>
+        <p class="text-sm">Brak zaplanowanych spotkań.</p>
+      </div>
+    }
   </div>
   <div class="bg-card border border-border rounded-lg p-5 shadow-sm space-y-4">
     <h2 class="text-xl font-bold mb-3"><i class="ri-file-text-line"></i> Pliki do sprawdzenia</h2>
     @for (file of pendingFiles(); track file) {
       <div>
         <app-activity-card [node]="file"></app-activity-card>
+      </div>
+    }
+    @empty {
+      <div class="p-6 text-center text-primary">
+        <i class="ri-check-double-line text-4xl"></i>
+        <p class="font-medium mt-2">Wszystko sprawdzone!</p>
+        <p class="text-sm">Brak plików oczekujących na akceptację.</p>
       </div>
     }
   </div>
