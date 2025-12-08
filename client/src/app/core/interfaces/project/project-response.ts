@@ -13,7 +13,8 @@ export interface ProjectResponse {
   description: string,
   members: ProjectMember[],
   status: ProjectStatus,
-  supervisor: UserResponse
+  supervisor: UserResponse,
+  links: string[]
 }
 
 export enum ProjectStatus {

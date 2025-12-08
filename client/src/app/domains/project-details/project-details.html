@@ -67,6 +67,27 @@
         </div>
       </div>
 
+      <div class="bg-card border border-border rounded-lg p-5 shadow-sm">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold text-foreground m-0"><i class="ri-link"></i> Linki Projektu</h2>
+          <button appButton variant="outline" size="icon" (click)="toggleAddLinkDialog()"><i
+            class="ri-add-line"></i></button>
+        </div>
+
+        <div class="space-y-4">
+          @for (link of project()?.links; track link) {
+            <div class="leading-tight">
+              <a [href]="link" target="_blank" class="font-medium text-foreground/80 hover:text-primary transition-colors">
+                {{ link }}
+              </a>
+            </div>
+          }
+          @empty {
+            <p class="text-muted-foreground text-sm">Brak linków projektu.</p>
+          }
+        </div>
+      </div>
+
     </aside>
 
     <main class="lg:col-span-3">

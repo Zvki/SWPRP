@@ -17,6 +17,7 @@ import {MembershipStatus} from '../../core/interfaces/project/project-member';
 import {AuthService} from '../../core/services/api/auth.service';
 import {StatusRequest} from '../../core/interfaces/project/status-request.interface';
 import {UserRole} from '../../core/interfaces/user-response';
+import {AddLinkDialog} from './components/add-link-dialog/add-link-dialog';
 
 @Component({
   imports: [
@@ -45,7 +46,7 @@ export class ProjectDetails implements OnInit {
   public ngOnInit(): void {
     this.projectId = this.route.snapshot.params['id'];
     this.projectService.getProject(this.projectId)
-    this.activityService.refreshActivities(this.projectId)
+    this.activityService.refreshActivities(this.projectId);
   }
 
   protected finishProject(id: string): void {
@@ -71,6 +72,13 @@ export class ProjectDetails implements OnInit {
   protected toggleAddMemberDialog(): void {
     this.dialog.open(AddMemberDialog, {
       data: { projectId: this.projectId },
+      maxWidth: '100%',
+      width: '30%',
+    })
+  }
+
+  protected toggleAddLinkDialog(): void {
+    this.dialog.open(AddLinkDialog, {
       maxWidth: '100%',
       width: '30%',
     })

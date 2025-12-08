@@ -7,6 +7,7 @@ import {MembershipRequest} from '../../interfaces/project/membership-request.int
 import {SnackbarService} from '../../../shared/utils/snackbar.service';
 import {StatusRequest} from '../../interfaces/project/status-request.interface';
 import {Router} from '@angular/router';
+import {LinkRequest} from '../../interfaces/project/link-request.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +22,11 @@ export class ProjectService {
   private readonly _projectsStore = signal<GroupedProjects | null>(null);
   private readonly _project = signal<ProjectResponse | null>(null);
 
-  public get projectsStore(): Signal<GroupedProjects | null>{
+  public get projectsStore(): Signal<GroupedProjects | null> {
     return this._projectsStore;
   }
 
-  public get project(): Signal<ProjectResponse | null>{
+  public get project(): Signal<ProjectResponse | null> {
     return this._project;
   }
 
@@ -47,13 +48,13 @@ export class ProjectService {
         }),
         catchError(() => of(false))
       ).subscribe()
-      ;
+    ;
   }
 
   public getProject(id: string): void {
     this.http.get<ProjectResponse>(
       `${this.API_URL}/${id}`,
-      { withCredentials: true }
+      {withCredentials: true}
     ).subscribe({
       next: response => this._project.set(response),
       error: err => {
@@ -99,5 +100,22 @@ export class ProjectService {
         console.error('Error adding member', err)
       }
     });
+  }
+
+  public addLink(url: string): void {
+    if (!this.project()) return;
+
+    const data: LinkRequest = {
+      projectId: this.project()!.id,
+      url: url,
+    }
+
+    this.http.post(`${this.API_URL}/add-link`, data, {withCredentials: true}).subscribe({
+      next: () => {
+        this.snackbar.success("Dodano link do projektu!"),
+          this.getProject(this.project()!.id)
+      },
+      error: err => this.snackbar.error("Wystąpił błąd podczas dodawania linku do projektu!")
+    })
   }
 }
