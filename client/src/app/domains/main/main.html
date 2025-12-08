@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
   <div class="bg-card border border-border rounded-lg p-5 shadow-sm space-y-4">
     <h2 class="text-xl font-bold mb-3"><i class="ri-calendar-line"></i> Najbliższe spotkania</h2>
     @for (meeting of nextMeetings(); track meeting) {
@@ -15,7 +15,7 @@
     }
   </div>
   <div class="bg-card border border-border rounded-lg p-5 shadow-sm space-y-4">
-    <h2 class="text-xl font-bold mb-3"><i class="ri-file-text-line"></i> Pliki do sprawdzenia</h2>
+    <h2 class="text-xl font-bold mb-3"><i class="ri-file-text-line"></i> {{ isSupervisor ? 'Pliki do sprawdzenia' : 'Zwroty' }}</h2>
     @for (file of pendingFiles(); track file) {
       <div>
         <app-activity-card [node]="file"></app-activity-card>
@@ -24,8 +24,12 @@
     @empty {
       <div class="p-6 text-center text-primary">
         <i class="ri-check-double-line text-4xl"></i>
-        <p class="font-medium mt-2">Wszystko sprawdzone!</p>
-        <p class="text-sm">Brak plików oczekujących na akceptację.</p>
+        @if (isSupervisor) {
+          <p class="font-medium mt-2">Wszystko sprawdzone!</p>
+          <p class="text-sm">Brak plików oczekujących na akceptację.</p>
+        }
+        <p class="font-medium mt-2">Wszystko gra!</p>
+        <p class="text-sm">Brak plików zwrotnych.</p>
       </div>
     }
   </div>
