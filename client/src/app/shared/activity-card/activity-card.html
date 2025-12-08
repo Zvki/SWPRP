@@ -43,14 +43,19 @@
         <button appButton size="icon" [disabled]="!node.file?.url"
                 (click)="onViewClick(node.file!.url)"><i class="ri-file-download-line"></i></button>
 
+        @if (user()?.id === node.author.id) {
+          <button appButton size="icon" variant="destructive"
+                  (click)="toggleDelete()"><i class="ri-chat-delete-line"></i></button>
+        }
+
       </div>
     }
 
     @if (node.type === ActivityType.MEETING && node.meeting !== null) {
-      <div class="flex items-start gap-3 p-3 border border-primary/50 rounded-lg bg-primary/10 mt-3">
+      <div class="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/30 mt-2">
 
         <div
-          class="w-10 h-10 rounded-md bg-primary/20 text-primary flex items-center justify-center text-xl shrink-0">
+          class="w-10 h-10 rounded-md bg-muted flex items-center justify-center text-xl">
           <i class="ri-calendar-event-line"></i>
         </div>
 
@@ -63,15 +68,22 @@
             {{ node.meeting?.date | date:'medium' }}
           </div>
         </div>
+        <button appButton size="icon" (click)="toggleMeetingNoteDialog()">
+          <i class="ri-sticky-note-line"></i>
+        </button>
 
         <a [href]="node.meeting?.url"
            target="_blank"
-           class="shrink-0"
         >
-          <button appButton size="sm">
-            <i class="ri-external-link-line mr-1"></i> Przejdź
+          <button appButton size="icon">
+            <i class="ri-external-link-line"></i>
           </button>
         </a>
+
+        @if (user()?.id === node.author.id) {
+          <button appButton size="icon" variant="destructive"
+                  (click)="toggleDelete()"><i class="ri-chat-delete-line"></i></button>
+        }
 
       </div>
     }

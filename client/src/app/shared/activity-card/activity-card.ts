@@ -8,6 +8,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {FileStatusDialog} from './components/file-status-dialog/file-status-dialog';
 import {UserRole} from '../../core/interfaces/user-response';
 import {AuthService} from '../../core/services/api/auth.service';
+import {ActivityService} from '../../core/services/api/activity.service';
+import {MeetingNoteDialog} from './components/meeting-note-dialog/meeting-note-dialog';
 
 @Component({
   selector: 'app-activity-card',
@@ -24,9 +26,13 @@ export class ActivityCard {
   public node!: ActivityNodeInterface;
 
   private readonly resourceService = inject(ResourceService);
-  protected readonly user = inject(AuthService).user;
+  private readonly activityService = inject(ActivityService);
   private readonly dialog = inject(MatDialog);
+  protected readonly user = inject(AuthService).user;
   protected readonly ActivityType = ActivityType;
+  protected readonly FileStatusStyling = FileStatusStyling;
+  protected readonly FileStatusLabel = FileStatusLabel;
+  protected readonly UserRole = UserRole;
 
   protected onViewClick(fileUrl: string): void {
     this.resourceService.getFile(fileUrl)
@@ -47,7 +53,18 @@ export class ActivityCard {
     })
   }
 
-  protected readonly FileStatusStyling = FileStatusStyling;
-  protected readonly FileStatusLabel = FileStatusLabel;
-  protected readonly UserRole = UserRole;
+  protected toggleMeetingNoteDialog(): void {
+    this.dialog.open(MeetingNoteDialog, {
+      data: { node: this.node},
+      maxWidth: '100%',
+      width: '40%',
+      }
+    )
+  }
+
+  protected toggleDelete(): void {
+    this.activityService.deleteActivity(this.node.activityId)
+  }
+
+
 }
