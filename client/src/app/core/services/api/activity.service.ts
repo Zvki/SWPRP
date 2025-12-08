@@ -5,7 +5,7 @@ import {
   ActivityResponse,
   ActivityType,
   CommentActivityReference,
-  FileActivityReference,
+  FileActivityReference, FileStatus,
   MeetingActivityReference
 } from '../../interfaces/activity/activity.interface';
 import {ActivityNodeInterface} from '../../interfaces/activity/activity-node.interface';
@@ -15,6 +15,7 @@ import {FileRequest} from '../../interfaces/activity/file-request.interface';
 import {Observable, tap} from 'rxjs';
 import {FileStatusRequest} from '../../interfaces/activity/file-status-request.interface';
 import {ProjectService} from './project.service';
+import {MeetingNoteRequest} from '../../interfaces/activity/meeting-note-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -63,8 +64,8 @@ export class ActivityService {
       });
   }
 
-  public loadPendingFiles(): void {
-    this.http.get<ActivityList>(`${this.API_URL}/pending-files`)
+  public loadFilesByStatus(status: FileStatus): void {
+    this.http.get<ActivityList>(`${this.API_URL}/files/${status}`)
       .subscribe({
         next: res => {
           this.pendingFiles.set(this.buildTree(res.activities))
@@ -91,7 +92,7 @@ export class ActivityService {
     return this.http.post(`${this.API_URL}/comment`, data)
       .pipe(
         tap({
-          next: () => this.refreshActivities(data.projectId),
+          next: () => this.refreshActivities(),
           error: err => console.error('Error adding comment', err)
         })
       );
@@ -106,7 +107,7 @@ export class ActivityService {
     return this.http.post(`${this.API_URL}/file`, formData)
       .pipe(
         tap({
-          next: () => this.refreshActivities(data.projectId),
+          next: () => this.refreshActivities(),
           error: err => console.error('Error adding file', err)
         })
       );
@@ -116,8 +117,8 @@ export class ActivityService {
     return this.http.patch(`${this.API_URL}/file-status`, data).pipe(
       tap({
         next: () => {
-          this.loadPendingFiles();
-          if(this.project()) this.refreshActivities(this.project()!.id)
+          this.loadFilesByStatus(FileStatus.PENDING);
+          if (this.project()) this.refreshActivities()
         },
         error: err => console.error('Error updating file status', err)
       })
@@ -127,16 +128,35 @@ export class ActivityService {
   public addMeeting(data: MeetingRequest): Observable<Object> {
     return this.http.post(`${this.API_URL}/meeting`, data).pipe(
       tap({
-        next: () => this.refreshActivities(data.projectId),
+        next: () => this.refreshActivities(),
         error: err => console.error('Error adding meeting', err)
       })
     );
   }
 
-  public refreshActivities(projectId: string): void {
-    this.loadActivities(projectId);
-    this.loadFiles(projectId);
-    this.loadMeetings(projectId);
+  public addMeetingNote(data: MeetingNoteRequest): Observable<Object> {
+    return this.http.patch(`${this.API_URL}/meeting-note`, data).pipe(
+      tap({
+        next: () => this.refreshActivities(),
+        error: err => console.error('Error adding meeting note', err)
+      })
+    );
+  }
+
+  public deleteActivity(activityId: string): void {
+    this.http.delete(`${this.API_URL}/${activityId}`)
+      .subscribe({
+        next: () => this.refreshActivities(),
+        error: err => console.error('Error deleting activity', err)
+      });
+  }
+
+  public refreshActivities(id: string = this.project()!.id): void {
+    this.loadActivities(id);
+    this.loadFiles(id);
+    this.loadMeetings(id);
+
+    this.loadNextMeetings();
   }
 
 
