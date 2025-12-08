@@ -1,0 +1,23 @@
+<h2 mat-dialog-title class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b pb-3">
+  Dodaj url do projektu
+</h2>
+<form (ngSubmit)="onSubmit()">
+  <mat-dialog-content class="py-4">
+    <mat-form-field class="w-full">
+      <mat-label>Url</mat-label>
+      <input matInput [formControl]="linkFormControl" placeholder="https://github.com/uzytkownik/repozytorium-projektu">
+      @if (linkFormControl.hasError('email') && !linkFormControl.hasError('required')) {
+        <mat-error>Proszę wprowadzić link</mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="pt-3 gap-3">
+    <button appButton variant="outline" (click)="onCancelClick()" type="button">
+      Anuluj
+    </button>
+    <button appButton type="submit" [disabled]="linkFormControl.invalid">
+      Dodaj link
+    </button>
+  </mat-dialog-actions>
+</form>
