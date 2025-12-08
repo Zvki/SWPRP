@@ -39,4 +39,6 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "supervisor_id")
     private User supervisor;
+
+    private List<String> links = new ArrayList<>();
 }

@@ -14,7 +14,8 @@ public record ProjectResponse(
     String description,
     ProjectStatus status,
     List<MembershipResponse> members,
-    UserResponse supervisor
+    UserResponse supervisor,
+    List<String> links
 ) {
     public static ProjectResponse fromProject(Project project) {
         if (project == null) {
@@ -36,7 +37,8 @@ public record ProjectResponse(
                 project.getDescription(),
                 project.getStatus(),
                 memberDtos,
-                supervisorDto
+                supervisorDto,
+                project.getLinks()
         );
     }
 }

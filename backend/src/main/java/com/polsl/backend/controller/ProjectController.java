@@ -1,10 +1,7 @@
 package com.polsl.backend.controller;
 
 import com.polsl.backend.dto.activity.StatusRequest;
-import com.polsl.backend.dto.project.MembershipRequest;
-import com.polsl.backend.dto.project.MembershipResponse;
-import com.polsl.backend.dto.project.ProjectRequest;
-import com.polsl.backend.dto.project.ProjectResponse;
+import com.polsl.backend.dto.project.*;
 import com.polsl.backend.service.AuthService;
 import com.polsl.backend.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +59,13 @@ public class ProjectController {
     @PostMapping("/add-member")
     public ResponseEntity<MembershipResponse> addMember(@RequestBody MembershipRequest data) {
         final var result = projectService.createMembership(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @PreAuthorize("@projectSecurity.isMember(#data.projectId(), authentication)")
+    @PostMapping("/add-link")
+    public ResponseEntity<ProjectResponse> addLink(@RequestBody LinkRequest data) {
+        final var result = projectService.addLink(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }

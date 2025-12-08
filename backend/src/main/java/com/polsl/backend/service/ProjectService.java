@@ -1,10 +1,7 @@
 package com.polsl.backend.service;
 
 import com.polsl.backend.dto.activity.StatusRequest;
-import com.polsl.backend.dto.project.MembershipRequest;
-import com.polsl.backend.dto.project.MembershipResponse;
-import com.polsl.backend.dto.project.ProjectRequest;
-import com.polsl.backend.dto.project.ProjectResponse;
+import com.polsl.backend.dto.project.*;
 import com.polsl.backend.enums.MembershipStatus;
 import com.polsl.backend.models.Project;
 import com.polsl.backend.models.ProjectMembership;
@@ -18,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -124,6 +122,19 @@ public class ProjectService {
         eventPublisher.publishEvent(new NewMembershipEvent(this, membership));
 
         return MembershipResponse.fromMembership(membership);
+    }
+
+    public ProjectResponse addLink(LinkRequest data) {
+        var project = projectRepository.findById(data.projectId())
+                .orElseThrow(() -> new EntityNotFoundException("Project with id " + data.projectId() + " wasn't found"));
+
+        if (project.getLinks() == null) {
+            project.setLinks(new ArrayList<>());
+        }
+
+        project.getLinks().add(data.url());
+
+        return ProjectResponse.fromProject(projectRepository.save(project));
     }
 
 }
