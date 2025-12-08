@@ -95,6 +95,12 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    @PatchMapping("/meeting-note")
+    public ResponseEntity<Void> addMeetingNote(@RequestBody MeetingNoteRequest data) {
+        activityService.addMeetingNote(data);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
     @DeleteMapping("/{activityId}")
     public ResponseEntity<Void> deleteActivity(@PathVariable UUID activityId) {
         activityService.deleteActivity(activityId);

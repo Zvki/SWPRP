@@ -65,7 +65,8 @@ public record ActivityReferenceResponse(
                     Map.of(
                             "title", m.getTitle(),
                             "url", m.getUrl(),
-                            "date", m.getStartTime()
+                            "date", m.getStartTime(),
+                            "note", m.getNotes() != null ? m.getNotes() : ""
                     )
             );
         }

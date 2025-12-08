@@ -183,4 +183,20 @@ public class ActivityService {
         file.setStatus(data.status());
     }
 
+    @Transactional
+    public void addMeetingNote(MeetingNoteRequest data) {
+        var activity = activityRepository.findById(data.activityId())
+                .orElseThrow(() -> new EntityNotFoundException("Activity with id " + data.activityId() + " wasn't found"));
+
+        var reference = activity.getReference();
+
+        reference = Hibernate.unproxy(reference, ActivityReference.class);
+
+        if (!(reference instanceof Meeting meeting)) {
+            throw new IllegalArgumentException("Activity " + data.activityId() + " is not a meeting");
+        }
+
+        meeting.setNotes(data.note());
+    }
+
 }

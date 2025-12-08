@@ -21,4 +21,5 @@ public class Meeting extends ActivityReference {
     private String title;
     private String url;
     private LocalDateTime startTime;
+    private String notes;
 }
