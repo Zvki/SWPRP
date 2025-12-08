@@ -1,13 +1,21 @@
 <h2 mat-dialog-title class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b pb-3">
   Zmień status pliku
 </h2>
-<mat-dialog-content class="py-4">
-  <mat-form-field>
-    <mat-label>Status pliku</mat-label>
-    <mat-select [(value)]="data.node!.file!.status" (valueChange)="toggleUpdate($event)">
-      <mat-option [value]="FileStatus.PENDING">{{ FileStatusLabel[FileStatus.PENDING] }}</mat-option>
-      <mat-option [value]="FileStatus.UNDER_REVIEW">{{ FileStatusLabel[FileStatus.UNDER_REVIEW] }}</mat-option>
-      <mat-option [value]="FileStatus.COMPLETED">{{ FileStatusLabel[FileStatus.COMPLETED] }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-</mat-dialog-content>
+<div>
+  <mat-dialog-content class="py-4">
+    <mat-form-field class="w-full">
+      <mat-label>Status pliku</mat-label>
+      <mat-select [(value)]="data.node!.file!.status" (valueChange)="toggleUpdate($event)">
+        <mat-option [value]="FileStatus.PENDING">{{ FileStatusLabel[FileStatus.PENDING] }}</mat-option>
+        <mat-option [value]="FileStatus.UNDER_REVIEW">{{ FileStatusLabel[FileStatus.UNDER_REVIEW] }}</mat-option>
+        <mat-option [value]="FileStatus.COMPLETED">{{ FileStatusLabel[FileStatus.COMPLETED] }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="pt-3 gap-3">
+    <button appButton variant="outline" (click)="onCancelClick()" type="button">
+      Zamknij
+    </button>
+  </mat-dialog-actions>
+</div>

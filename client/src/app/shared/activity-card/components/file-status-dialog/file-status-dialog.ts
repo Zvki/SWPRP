@@ -1,11 +1,18 @@
 import {Component, inject} from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
-import {MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from '@angular/material/dialog';
 import {FileStatus, FileStatusLabel} from '../../../../core/interfaces/activity/activity.interface';
 import {ActivityService} from '../../../../core/services/api/activity.service';
 import {ActivityNodeInterface} from '../../../../core/interfaces/activity/activity-node.interface';
 import {FileStatusRequest} from '../../../../core/interfaces/activity/file-status-request.interface';
+import {ButtonDirective} from '../../../ui/button/button-directive';
 
 @Component({
   selector: 'app-file-status-dialog',
@@ -13,7 +20,9 @@ import {FileStatusRequest} from '../../../../core/interfaces/activity/file-statu
     MatFormFieldModule,
     MatSelectModule,
     MatDialogTitle,
-    MatDialogContent
+    MatDialogContent,
+    ButtonDirective,
+    MatDialogActions
   ],
   templateUrl: './file-status-dialog.html',
   styleUrl: './file-status-dialog.css',
@@ -36,5 +45,9 @@ export class FileStatusDialog {
     this.activityService.updateFileStatus(data).subscribe({
       next: () => this.dialogRef.close()
     })
+  }
+
+  protected onCancelClick(): void {
+    this.dialogRef.close();
   }
 }
