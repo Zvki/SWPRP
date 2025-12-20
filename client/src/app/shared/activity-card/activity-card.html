@@ -1,89 +1,93 @@
 <div class="flex items-start gap-3">
 
-  <div class="flex-1">
-    <div class="text-sm mb-1">
-      <strong class="text-foreground">
-        {{ node.author.firstName }} {{ node.author.lastName }}
-      </strong>
+  <div class="flex-1 min-w-0"> <div class="text-sm mb-1 flex flex-wrap gap-1 items-baseline">
+    <strong class="text-foreground">
+      {{ node.author.firstName }} {{ node.author.lastName }}
+    </strong>
+    <span class="text-muted-foreground text-xs sm:text-sm">
+        • {{ node.createdAt | date:'short' }}
+      </span>
+  </div>
 
-      <span class="text-muted-foreground">
-          • {{ node.createdAt | date:'short' }}
-        </span>
-    </div>
-
-
-    <div class="text-foreground/90 leading-relaxed whitespace-pre-line">
+    <div class="text-foreground/90 leading-relaxed whitespace-pre-line break-words">
       {{ node.content }}
     </div>
 
 
     @if (node.type === ActivityType.FILE && node.file !== null) {
-      <div class="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/30 mt-2">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 border border-border rounded-lg bg-muted/30 mt-2">
 
-        <div class="w-10 h-10 rounded-md bg-muted flex items-center justify-center text-xl">
-          <i class="ri-file-pdf-2-line"></i>
-        </div>
+        <div class="flex items-center gap-3 w-full sm:w-auto sm:flex-1 min-w-0">
+          <div class="w-10 h-10 shrink-0 rounded-md bg-muted flex items-center justify-center text-xl">
+            <i class="ri-file-pdf-2-line"></i>
+          </div>
 
-        <div class="flex-1">
-          <div class="text-foreground font-medium">
+          <div class="flex-1 min-w-0"> <div class="text-foreground font-medium truncate" [title]="node.file?.originalName">
             {{ node.file?.originalName }}
+          </div>
           </div>
         </div>
 
-        <span class="text-sm font-medium px-3 py-1 rounded-full whitespace-nowrap"
-              [ngClass]="FileStatusStyling[node.file!.status]">
-        {{ FileStatusLabel[node.file!.status] }}
-        </span>
+        <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto pl-13 sm:pl-0">
+          <span class="text-sm font-medium px-3 py-1 rounded-full whitespace-nowrap text-xs sm:text-sm"
+                [ngClass]="FileStatusStyling[node.file!.status]">
+            {{ FileStatusLabel[node.file!.status] }}
+          </span>
 
-        @if (user()?.role === UserRole.SUPERVISOR) {
-          <button appButton size="icon"
-                  (click)="toggleEditDialog()"><i class="ri-edit-line"></i></button>
-        }
+          <div class="flex gap-1">
+            @if (user()?.role === UserRole.SUPERVISOR) {
+              <button appButton size="icon"
+                      (click)="toggleEditDialog()"><i class="ri-edit-line"></i></button>
+            }
 
-        <button appButton size="icon" [disabled]="!node.file?.url"
-                (click)="onViewClick(node.file!.url)"><i class="ri-file-download-line"></i></button>
+            <button appButton size="icon" [disabled]="!node.file?.url"
+                    (click)="onViewClick(node.file!.url)"><i class="ri-file-download-line"></i></button>
 
-        @if (user()?.id === node.author.id) {
-          <button appButton size="icon" variant="destructive"
-                  (click)="toggleDelete()"><i class="ri-chat-delete-line"></i></button>
-        }
+            @if (user()?.id === node.author.id) {
+              <button appButton size="icon" variant="destructive"
+                      (click)="toggleDelete()"><i class="ri-chat-delete-line"></i></button>
+            }
+          </div>
+        </div>
 
       </div>
     }
 
     @if (node.type === ActivityType.MEETING && node.meeting !== null) {
-      <div class="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/30 mt-2">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 border border-border rounded-lg bg-muted/30 mt-2">
 
-        <div
-          class="w-10 h-10 rounded-md bg-muted flex items-center justify-center text-xl">
-          <i class="ri-calendar-event-line"></i>
+        <div class="flex items-center gap-3 w-full sm:w-auto sm:flex-1">
+          <div class="w-10 h-10 shrink-0 rounded-md bg-muted flex items-center justify-center text-xl">
+            <i class="ri-calendar-event-line"></i>
+          </div>
+
+          <div class="flex-1 space-y-1">
+            <div class="text-primary font-bold leading-tight">
+              {{ node.meeting?.title }}
+            </div>
+            <div class="text-sm text-foreground/80 flex items-center">
+              <i class="ri-time-line mr-1 text-xs"></i>
+              <span class="text-xs sm:text-sm">{{ node.meeting?.date | date:'medium' }}</span>
+            </div>
+          </div>
         </div>
 
-        <div class="flex-1 space-y-1">
-          <div class="text-primary font-bold">
-            {{ node.meeting?.title }}
-          </div>
-          <div class="text-sm text-foreground/80">
-            <i class="ri-time-line mr-1"></i>
-            {{ node.meeting?.date | date:'medium' }}
-          </div>
-        </div>
-        <button appButton size="icon" (click)="toggleMeetingNoteDialog()">
-          <i class="ri-sticky-note-line"></i>
-        </button>
-
-        <a [href]="node.meeting?.url"
-           target="_blank"
-        >
-          <button appButton size="icon">
-            <i class="ri-external-link-line"></i>
+        <div class="flex items-center justify-end gap-2 w-full sm:w-auto border-t sm:border-t-0 border-border/50 pt-2 sm:pt-0 mt-1 sm:mt-0">
+          <button appButton size="icon" (click)="toggleMeetingNoteDialog()" title="Notatki">
+            <i class="ri-sticky-note-line"></i>
           </button>
-        </a>
 
-        @if (user()?.id === node.author.id) {
-          <button appButton size="icon" variant="destructive"
-                  (click)="toggleDelete()"><i class="ri-chat-delete-line"></i></button>
-        }
+          <a [href]="node.meeting?.url" target="_blank">
+            <button appButton size="icon" title="Dołącz">
+              <i class="ri-external-link-line"></i>
+            </button>
+          </a>
+
+          @if (user()?.id === node.author.id) {
+            <button appButton size="icon" variant="destructive"
+                    (click)="toggleDelete()"><i class="ri-chat-delete-line"></i></button>
+          }
+        </div>
 
       </div>
     }

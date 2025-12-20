@@ -7,12 +7,36 @@
       </app-activity-node>
 
       @if (node.children.length > 0) {
-        <div class="border-l border-border ml-6 pl-6 mt-4">
-          <app-activity-tree
-            [list]="node.children"
-            [projectId]="projectId">
-          </app-activity-tree>
+
+        <div class="mt-2 mb-1">
+          <button
+            (click)="toggleCollapse(node.id)"
+            class="cursor-pointer text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors focus:outline-none">
+
+            @if (!isCollapsed(node.id)) {
+              <i class="ri-add-circle-line text-lg"></i>
+              <span>Pokaż {{ node.children.length }} odpowiedzi</span>
+            } @else {
+              <i class="ri-indeterminate-circle-line text-lg"></i>
+              <span class="ml-1">Zwiń wątek</span>
+            }
+          </button>
         </div>
+
+        @if (isCollapsed(node.id)) {
+          <div class="border-border"
+               [ngClass]="{
+                   'border-l ml-2 pl-2 sm:ml-6 sm:pl-6': level < 3,
+                   'mt-2 border-t pt-2': level >= 3
+                 }">
+
+            <app-activity-tree
+              [list]="node.children"
+              [level]="level + 1"
+              [projectId]="projectId">
+            </app-activity-tree>
+          </div>
+        }
       }
     </li>
   }

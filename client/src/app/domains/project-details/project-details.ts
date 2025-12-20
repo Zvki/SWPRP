@@ -19,6 +19,7 @@ import {StatusRequest} from '../../core/interfaces/project/status-request.interf
 import {UserRole} from '../../core/interfaces/user-response';
 import {AddLinkDialog} from './components/add-link-dialog/add-link-dialog';
 import {ResourceService} from '../../core/services/api/resource.service';
+import {ScreenSizeService} from '../../core/services/screen-size.service';
 
 @Component({
   imports: [
@@ -38,6 +39,7 @@ export class ProjectDetails implements OnInit {
   private readonly activityService = inject(ActivityService);
   protected readonly resourceService = inject(ResourceService);
   private readonly dialog = inject(MatDialog);
+  private readonly isMobile = inject(ScreenSizeService).isMobile();
   protected commentsTree= this.activityService.activityTree;
   protected filesTree = this.activityService.filesTree;
   protected meetingsTree = this.activityService.meetingTree;
@@ -75,14 +77,14 @@ export class ProjectDetails implements OnInit {
     this.dialog.open(AddMemberDialog, {
       data: { projectId: this.projectId },
       maxWidth: '100%',
-      width: '30%',
+      width: this.isMobile ? '90%' : '30%',
     })
   }
 
   protected toggleAddLinkDialog(): void {
     this.dialog.open(AddLinkDialog, {
       maxWidth: '100%',
-      width: '30%',
+      width: this.isMobile ? '90%' : '30%',
     })
   }
 

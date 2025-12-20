@@ -10,15 +10,15 @@
       <input matInput formControlName="title" placeholder="Np. Omówienie Raportu Q3" required>
     </mat-form-field>
 
-    <div class="flex gap-4">
-      <mat-form-field class="w-1/2">
+    <div class="flex flex-col sm:flex-row gap-4">
+      <mat-form-field class="w-full sm:w-1/2">
         <mat-label>Data spotkania</mat-label>
         <input matInput [matDatepicker]="datepicker" formControlName="meetingDate">
         <mat-datepicker #datepicker/>
         <mat-datepicker-toggle [for]="datepicker" matSuffix/>
       </mat-form-field>
 
-      <mat-form-field class="w-1/2">
+      <mat-form-field class="w-full sm:w-1/2">
         <mat-label>Godzina spotkania</mat-label>
         <input matInput
                formControlName="meetingDate"

@@ -5,7 +5,11 @@
   <mat-dialog-content class="py-4">
     <mat-form-field class="w-full">
       <mat-label>Notatka</mat-label>
-      <textarea matInput [formControl]="noteFormControl"></textarea>
+      <textarea matInput [formControl]="noteFormControl" class="min-h-[20vh]" maxlength="255"
+                #notesInput></textarea>
+      <mat-hint align="end">
+        {{ notesInput.value!.length || 0 }} / 255
+      </mat-hint>
     </mat-form-field>
   </mat-dialog-content>
 
@@ -14,7 +18,7 @@
       Zamknij
     </button>
 
-    @if(user()?.role === UserRole.SUPERVISOR){
+    @if (user()?.role === UserRole.SUPERVISOR) {
       <button appButton type="submit">
         Dodaj notatke
       </button>

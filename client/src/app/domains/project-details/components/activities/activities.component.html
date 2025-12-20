@@ -26,30 +26,31 @@
     </textarea>
   </div>
 
-  <div class="flex justify-between items-end">
+  <div class="flex justify-between items-center"> <div class="flex gap-2">
+    <button
+      appButton
+      variant="outline"
+      (click)="openFileUploadDialog()"
+      title="Dodaj Plik"> <i class="ri-file-add-line"></i>
+      <span class="hidden sm:inline ml-2">Dodaj Plik</span>
+    </button>
 
-    <div class="flex gap-2">
-      <button
-        appButton
-        variant="outline"
-        (click)="openFileUploadDialog()">
-        <i class="ri-file-add-line mr-2"></i> Dodaj Plik
-      </button>
-
-      <button
-        appButton
-        variant="outline"
-        (click)="openMeetingDialog()">
-        <i class="ri-calendar-event-line mr-2"></i> Dodaj Spotkanie
-      </button>
-    </div>
+    <button
+      appButton
+      variant="outline"
+      (click)="openMeetingDialog()"
+      title="Dodaj Spotkanie">
+      <i class="ri-calendar-event-line"></i>
+      <span class="hidden sm:inline ml-2">Dodaj Spotkanie</span>
+    </button>
+  </div>
 
     <button
       appButton
       size="sm"
       variant="default"
       (click)="sendRootComment()">
-      Wyślij Komentarz
+      <span>Wyślij <span class="hidden sm:inline">Komentarz</span></span>
     </button>
   </div>
 </section>

@@ -8,6 +8,7 @@ import {ActivityService} from '../../../../core/services/api/activity.service';
 import {FileUploadDialogComponent} from '../file-upload-dialog/file-upload-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MeetingDialog} from '../meeting-dialog/meeting-dialog';
+import {ScreenSizeService} from '../../../../core/services/screen-size.service';
 
 @Component({
   selector: 'app-activities',
@@ -22,6 +23,7 @@ import {MeetingDialog} from '../meeting-dialog/meeting-dialog';
 export class Activities implements AfterViewInit{
 
   private readonly activityService = inject(ActivityService);
+  private readonly isMobile = inject(ScreenSizeService).isMobile();
   private readonly dialog = inject(MatDialog);
 
   @Input()
@@ -54,7 +56,7 @@ export class Activities implements AfterViewInit{
     this.dialog.open(FileUploadDialogComponent, {
       data: { projectId: this.projectId },
       maxWidth: '100%',
-      width: '30%',
+      width: this.isMobile? '90%' : '30%',
       disableClose: true
     })
   }
@@ -65,7 +67,7 @@ export class Activities implements AfterViewInit{
         projectId: this.projectId
       },
       maxWidth: '100%',
-      width: '30%',
+      width: this.isMobile? '90%' : '30%',
       disableClose: true
     })
   }

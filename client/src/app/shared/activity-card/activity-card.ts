@@ -10,6 +10,7 @@ import {UserRole} from '../../core/interfaces/user-response';
 import {AuthService} from '../../core/services/api/auth.service';
 import {ActivityService} from '../../core/services/api/activity.service';
 import {MeetingNoteDialog} from './components/meeting-note-dialog/meeting-note-dialog';
+import {ScreenSizeService} from '../../core/services/screen-size.service';
 
 @Component({
   selector: 'app-activity-card',
@@ -28,6 +29,7 @@ export class ActivityCard {
   private readonly resourceService = inject(ResourceService);
   private readonly activityService = inject(ActivityService);
   private readonly dialog = inject(MatDialog);
+  private readonly isMobile = inject(ScreenSizeService).isMobile();
   protected readonly user = inject(AuthService).user;
   protected readonly ActivityType = ActivityType;
   protected readonly FileStatusStyling = FileStatusStyling;
@@ -57,7 +59,7 @@ export class ActivityCard {
     this.dialog.open(MeetingNoteDialog, {
       data: { node: this.node},
       maxWidth: '100%',
-      width: '40%',
+      width: this.isMobile ? '90%' : '30%',
       }
     )
   }

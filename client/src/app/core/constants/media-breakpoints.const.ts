@@ -1,0 +1,4 @@
+export const MEDIA_BREAKPOINTS = {
+  DESKTOP: 1200,
+  MOBILE: 992
+}
