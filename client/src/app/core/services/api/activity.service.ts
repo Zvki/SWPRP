@@ -28,6 +28,7 @@ export class ActivityService {
   meetingTree = signal<ActivityNodeInterface[]>([]);
   pendingFiles = signal<ActivityNodeInterface[]>([]);
   nextMeetings = signal<ActivityNodeInterface[]>([]);
+  meetings = signal<MeetingActivityReference[]>([]);
 
   private readonly http = inject(HttpClient);
 
@@ -56,7 +57,10 @@ export class ActivityService {
   public loadMeetings(projectId: string): void {
     this.http.get<ActivityList>(`${this.API_URL}/${projectId}/meetings`)
       .subscribe({
-        next: res => this.meetingTree.set(this.buildTree(res.activities)),
+        next: res => {
+          this.meetings.set(res.activities.map(a => a.reference.data as MeetingActivityReference));
+          this.meetingTree.set(this.buildTree(res.activities))
+        },
         error: err => {
           console.error('Error loading meetings', err);
           this.meetingTree.set([]);

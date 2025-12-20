@@ -89,7 +89,7 @@ export class ProjectDetails implements OnInit {
   }
 
   protected generateReport(id: string): void {
-    this.resourceService.getReport(id);
+    this.resourceService.getReport().then(r => console.log(r));
   }
 
   protected readonly ProjectStatusLabel = ProjectStatusLabel;
