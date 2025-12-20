@@ -11,6 +11,8 @@ services:
       - POSTGRES_DB=swprp_db
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - swprp-network
 
   keycloak-database:
     image: postgres:17-alpine
@@ -21,11 +23,13 @@ services:
       - POSTGRES_DB=keycloak_db
     volumes:
       - postgres-keycloak-data:/var/lib/postgresql/data
+    networks:
+      - swprp-network
 
   keycloak:
     image: keycloak/keycloak:26.3
     container_name: swprp-keycloak
-    command: start-dev
+    command: start-dev --http-host=0.0.0.0
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: keycloak-database
@@ -38,7 +42,59 @@ services:
       - "8080:8080"
     depends_on:
       - keycloak-database
+    networks:
+      - swprp-network
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: swprp-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - swprp-network
+
+  backend:
+    container_name: swprp-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://app-database:5432/swprp_db
+      - SPRING_DATASOURCE_USERNAME=${PG_SWPRP_USER}
+      - SPRING_DATASOURCE_PASSWORD=${PG_SWPRP_PASS}
+      - SPRING_MAIL_HOST=mailhog
+      - SPRING_MAIL_PORT=1025
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://192.168.55.104:8080/realms/swprp
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/swprp/protocol/openid-connect/certs
+
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY=DEBUG
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY_OAUTH2=DEBUG
+    depends_on:
+      - app-database
+      - keycloak
+      - mailhog
+    networks:
+      - swprp-network
+
+  frontend:
+    container_name: swprp-frontend
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "8088:80"
+    depends_on:
+      - backend
+    networks:
+      - swprp-network
 
 volumes:
   postgres-data:
   postgres-keycloak-data:
+
+networks:
+  swprp-network:
+    driver: bridge
