@@ -1,4 +1,4 @@
-package com.polsl.backend.dto.activity;
+package com.polsl.backend.dto.project;
 
 import com.polsl.backend.enums.ProjectStatus;
 

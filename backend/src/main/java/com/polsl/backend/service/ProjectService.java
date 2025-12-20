@@ -1,6 +1,6 @@
 package com.polsl.backend.service;
 
-import com.polsl.backend.dto.activity.StatusRequest;
+import com.polsl.backend.dto.project.StatusRequest;
 import com.polsl.backend.dto.project.*;
 import com.polsl.backend.enums.MembershipStatus;
 import com.polsl.backend.models.Project;
