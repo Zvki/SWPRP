@@ -21,7 +21,7 @@ import {MeetingNoteRequest} from '../../interfaces/activity/meeting-note-request
   providedIn: 'root',
 })
 export class ActivityService {
-  private API_URL = 'http://localhost:4200/swprp/activity'
+  private API_URL = '/swprp/activity'
   private readonly project = inject(ProjectService).project;
   activityTree = signal<ActivityNodeInterface[]>([]);
   filesTree = signal<ActivityNodeInterface[]>([]);

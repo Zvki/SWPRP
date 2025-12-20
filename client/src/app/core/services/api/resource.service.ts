@@ -1,12 +1,14 @@
 import {inject, Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {ProjectService} from './project.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ResourceService {
-  private readonly SPRING_BOOT_BASE_URL = 'http://localhost:4200/swprp/resource';
+  private readonly SPRING_BOOT_BASE_URL = '/swprp/resource';
+  private readonly project = inject(ProjectService).project();
 
   private readonly DOWNLOAD_ENDPOINT = '/download';
 
@@ -19,28 +21,11 @@ export class ResourceService {
   }
 
 
-  public getReport(id: string): void {
-    const url = `http://localhost:4200/swprp/project/${id}/report`;
+  public getReport(): void {
 
-    this.http.get(url, { responseType: 'blob' }).subscribe({
-      next: (responseBlob: Blob) => {
-        const fileURL = URL.createObjectURL(responseBlob);
-        const a = document.createElement('a');
-        a.href = fileURL;
+    if(!this.project) return;
 
-        a.download = `Raport_Projektu_${id}.docx`;
 
-        document.body.appendChild(a);
-        a.click();
 
-        document.body.removeChild(a);
-        URL.revokeObjectURL(fileURL);
-        console.log('Pobieranie pliku zostało zainicjowane.');
-      },
-      error: (error) => {
-        console.error('Błąd podczas pobierania raportu:', error);
-        alert('Nie udało się pobrać raportu. Sprawdź konsolę.');
-      }
-    });
   }
 }

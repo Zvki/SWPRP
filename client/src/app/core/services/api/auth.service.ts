@@ -8,7 +8,7 @@ import {KeycloakService} from '../auth/keycloak.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:4200/swprp/auth'
+  private readonly API_URL = '/swprp/auth'
   private readonly http = inject(HttpClient);
   private readonly keycloak = inject(KeycloakService);
 

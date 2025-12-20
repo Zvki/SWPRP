@@ -9,7 +9,7 @@ import {catchError, map, of} from 'rxjs';
 export class UserService {
 
   private http = inject(HttpClient)
-  private API_URL = 'http://localhost:4200/swprp/user'
+  private API_URL = '/swprp/user'
 
   private _supervisors = signal<UserResponse[] | null>(null);
 

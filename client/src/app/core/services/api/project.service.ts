@@ -15,7 +15,7 @@ import {LinkRequest} from '../../interfaces/project/link-request.interface';
 export class ProjectService {
 
   private readonly http = inject(HttpClient)
-  private readonly API_URL = 'http://localhost:4200/swprp/project'
+  private readonly API_URL = '/swprp/project'
   private readonly snackbar = inject(SnackbarService);
   private readonly router = inject(Router)
 
