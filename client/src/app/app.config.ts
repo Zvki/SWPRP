@@ -15,13 +15,14 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideKeycloak({
       config: {
-        url: 'http://localhost:8080',
+        url: 'http://192.168.55.104:8080',
         realm: 'swprp',
         clientId: 'swprp-client'
       },
       initOptions: {
         onLoad: 'login-required',
-        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
+        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+        checkLoginIframe: false
       }
     }),
     provideBrowserGlobalErrorListeners(),
