@@ -18,6 +18,7 @@ import {AuthService} from '../../core/services/api/auth.service';
 import {StatusRequest} from '../../core/interfaces/project/status-request.interface';
 import {UserRole} from '../../core/interfaces/user-response';
 import {AddLinkDialog} from './components/add-link-dialog/add-link-dialog';
+import {ResourceService} from '../../core/services/api/resource.service';
 
 @Component({
   imports: [
@@ -35,6 +36,7 @@ export class ProjectDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly projectService = inject(ProjectService);
   private readonly activityService = inject(ActivityService);
+  protected readonly resourceService = inject(ResourceService);
   private readonly dialog = inject(MatDialog);
   protected commentsTree= this.activityService.activityTree;
   protected filesTree = this.activityService.filesTree;
@@ -82,6 +84,10 @@ export class ProjectDetails implements OnInit {
       maxWidth: '100%',
       width: '30%',
     })
+  }
+
+  protected generateReport(id: string): void {
+    this.resourceService.getReport(id);
   }
 
   protected readonly ProjectStatusLabel = ProjectStatusLabel;

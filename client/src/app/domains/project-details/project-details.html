@@ -88,6 +88,12 @@
         </div>
       </div>
 
+      @if(user()?.role === UserRole.SUPERVISOR){
+        <button appButton variant="default"  (click)="generateReport(project()!.id)">
+          Generuj raport
+        </button>
+      }
+
     </aside>
 
     <main class="lg:col-span-3">
