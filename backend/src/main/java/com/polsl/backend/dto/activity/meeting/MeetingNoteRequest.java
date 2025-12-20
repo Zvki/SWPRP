@@ -1,4 +1,4 @@
-package com.polsl.backend.dto.activity;
+package com.polsl.backend.dto.activity.meeting;
 
 import java.util.UUID;
 

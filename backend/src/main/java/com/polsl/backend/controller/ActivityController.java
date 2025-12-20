@@ -1,8 +1,11 @@
 package com.polsl.backend.controller;
 
 import com.polsl.backend.dto.activity.*;
+import com.polsl.backend.dto.activity.comment.CommentRequest;
 import com.polsl.backend.dto.activity.file.FileRequest;
 import com.polsl.backend.dto.activity.file.FileStatusRequest;
+import com.polsl.backend.dto.activity.meeting.MeetingNoteRequest;
+import com.polsl.backend.dto.activity.meeting.MeetingRequest;
 import com.polsl.backend.enums.FileStatus;
 import com.polsl.backend.service.ActivityService;
 import com.polsl.backend.service.AuthService;
