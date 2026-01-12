@@ -36,7 +36,7 @@ Po uruchomieniu kontenery są dostępne pod następującymi portami:
 | **Backend API** | [http://localhost:8081](http://localhost:8081) | - | Serwer Spring Boot |
 | **Keycloak** | [http://localhost:8080](http://localhost:8080) | `admin` / `admin` | Zarządzanie tożsamością |
 | **MailHog** | [http://localhost:8025](http://localhost:8025) | - | Podgląd e-maili deweloperskich |
-| **Baza Danych** | `localhost:5432` | `swprp_user` / `swprp_password` | Główna baza danych aplikacji |
+| **Baza Danych** | `localhost:5432` | `promotor` / `superhaslo` | Główna baza danych aplikacji |
 
 ## 🗄️ Bazy Danych
 
